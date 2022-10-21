@@ -11,6 +11,7 @@ module.exports = {
         'plugin:jsx-a11y/recommended',
         'plugin:import/recommended',
     ],
+    parser: '@babel/eslint-parser',
     overrides: [],
     parserOptions: {
         ecmaFeatures: {
