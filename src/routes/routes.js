@@ -1,3 +1,4 @@
+import Login from '../features/login';
 import Counter from '../features/counter/Counter';
 
 export const routes = [
@@ -30,6 +31,12 @@ export const routes = [
         path: 'reclamos',
         Component: Counter,
         name: 'Reclamos',
+    },
+    {
+        to: '/login',
+        path: 'login',
+        Component: Login,
+        name: 'Login',
     },
 ];
 

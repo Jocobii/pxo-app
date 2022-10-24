@@ -2,7 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import Home from './pages/Home/Home';
+// import Home from './pages/Home/Home';
+import Navegation from './routes/Navegation';
 import './index.css';
 import 'antd/dist/antd.min.css';
 
@@ -12,9 +13,10 @@ const root = createRoot(container);
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <Home>
+            {/* <Home>
                 <div>Test</div>
-            </Home>
+            </Home> */}
+            <Navegation />
         </Provider>
     </React.StrictMode>,
 );
