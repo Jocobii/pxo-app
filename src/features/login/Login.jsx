@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import {
     Form, Input, Button, Checkbox,
     Row, Col,
 } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import getCharacters from '../../services/auth.service';
+import { createUser } from './userSlice';
 
-const NormalLoginForm = () => {
+const Login = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    useEffect(() => {
+        console.log('login');
+    }, []);
+    const signIn = async () => {
+        try {
+            const result = await getCharacters();
+            dispatch(createUser(result));
+            navigate('/home');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
     };
@@ -36,7 +55,7 @@ const NormalLoginForm = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Por favor ingresa un correo electrónico valido!',
+                                message: 'Por favor ingresa un correo electrónico valido',
                             },
                         ]}
                     >
@@ -52,7 +71,7 @@ const NormalLoginForm = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Por favor ingresa tu contraseña!',
+                                message: 'Por favor ingresa tu contraseña',
                             },
                         ]}
                     >
@@ -79,6 +98,7 @@ const NormalLoginForm = () => {
                             type="primary"
                             htmlType="submit"
                             className="login-form-button"
+                            onClick={() => signIn()}
                         >
                             Log in
                         </Button>
@@ -89,4 +109,4 @@ const NormalLoginForm = () => {
     );
 };
 
-export default NormalLoginForm;
+export default Login;

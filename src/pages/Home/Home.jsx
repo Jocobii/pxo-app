@@ -1,35 +1,16 @@
-import React, { useState } from 'react';
-import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-} from '@ant-design/icons';
-import { Layout } from 'antd';
-import './index.css';
-import MainContainer from '../../components/MainContainer/MainContainer';
-import SiderMenu from '../../components/SiderMenu/SiderMenu';
+import React from 'react';
+import { Row, Col } from 'antd';
 
-const { Header } = Layout;
-const Home = () => {
-    const [collapsed, setCollapsed] = useState(false);
-    return (
-        <Layout>
-            <SiderMenu collapsed={collapsed} />
-            <Layout className="site-layout">
-                <Header
-                    className="site-layout-background"
-                    style={{
-                        padding: 0,
-                    }}
-                >
-                    {
-                        collapsed
-                            ? <MenuUnfoldOutlined className="trigger" onClick={() => setCollapsed(!collapsed)} />
-                            : <MenuFoldOutlined className="trigger" onClick={() => setCollapsed(!collapsed)} />
-                    }
-                </Header>
-                <MainContainer />
-            </Layout>
-        </Layout>
-    );
-};
+const Home = () => (
+    <Row justify="space-around" align="middle" style={{ height: '100vh' }}>
+        <Col style={{ }}>
+            <img
+                alt="logo"
+                style={{ opacity: 0.3 }}
+                // style={{ height: '80%', width: '80%' }}
+                src="http://www.alasdeeric.com/gdc/archivos/Screen%20Shot%202019-10-24%20at%2011.24.37%20PM(1).png"
+            />
+        </Col>
+    </Row>
+);
 export default Home;
