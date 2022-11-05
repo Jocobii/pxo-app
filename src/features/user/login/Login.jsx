@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import { login, selectUser } from './userSlice';
+import { login, selectUser } from '../userSlice';
 
-const Login = () => {
+export const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userId = useSelector(selectUser).id;

@@ -1,4 +1,4 @@
-import Login from '../features/login';
+import Login from '../features/user/login';
 import Counter from '../features/counter/Counter';
 import NotFound from '../pages/notFound/NotFound';
 import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';

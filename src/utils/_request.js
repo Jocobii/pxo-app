@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getUserData } from '../features/login/utils/user.localstorage';
+import { getUserData } from '../features/user/utils/user.localstorage';
 
 const BASE_URL = 'http://localhost:5000/api/v1';
 
