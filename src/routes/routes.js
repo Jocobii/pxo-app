@@ -1,6 +1,7 @@
 import Login from '../features/login';
 import Counter from '../features/counter/Counter';
 import NotFound from '../pages/notFound/NotFound';
+import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';
 
 export const publicRoutes = [
     {
@@ -8,6 +9,12 @@ export const publicRoutes = [
         path: '/login',
         Component: Login,
         name: 'Login',
+    },
+    {
+        to: '/recovery-password',
+        path: '/recovery-password',
+        Component: RecoveryPassword,
+        name: 'Recovery Password',
     },
     {
         to: '/*',

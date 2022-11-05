@@ -1,33 +1,37 @@
 import React, { useEffect } from 'react';
 import './index.css';
 import {
-    Form, Input, Button, Checkbox,
-    Row, Col,
+    Form, Input, Button,
+    Row, Col, message,
 } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import getCharacters from '../../services/auth.service';
-import { createUser } from './userSlice';
+
+import { login, selectUser } from './userSlice';
 
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    useEffect(() => {
-        console.log('login');
-    }, []);
-    const signIn = async () => {
-        try {
-            const result = await getCharacters();
-            dispatch(createUser(result));
-            navigate('/home');
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const userId = useSelector(selectUser).id;
 
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+    useEffect(() => {
+        if (userId) {
+            navigate('/home');
+        }
+    }, [navigate, userId]);
+
+    const onFinish = async (values) => {
+        const {
+            error, message: msg,
+        } = await dispatch(login(values));
+
+        if (error) {
+            message.error(msg);
+            return;
+        }
+        message.success(msg);
+        navigate('/home');
     };
 
     return (
@@ -51,7 +55,7 @@ const Login = () => {
                     onFinish={onFinish}
                 >
                     <Form.Item
-                        name="username"
+                        name="email"
                         rules={[
                             {
                                 required: true,
@@ -83,24 +87,23 @@ const Login = () => {
                             placeholder="Password"
                         />
                     </Form.Item>
-                    <Form.Item>
-                        <Form.Item
-                            name="remember"
-                            valuePropName="checked"
-                            noStyle
-                        >
-                            <Checkbox>Remember me</Checkbox>
-                        </Form.Item>
-                    </Form.Item>
 
                     <Form.Item>
                         <Button
                             type="primary"
                             htmlType="submit"
                             className="login-form-button"
-                            onClick={() => signIn()}
                         >
                             Log in
+                        </Button>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="login-form-button"
+                        >
+                            Recuperar contraseña
                         </Button>
                     </Form.Item>
                 </Form>
