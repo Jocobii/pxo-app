@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn } from './services/auth/auth.service';
-import { saveUserData, getUserData } from './utils/user.localstorage';
+import { signIn, logout } from './services/auth/auth.service';
+import { saveUserData, getUserData, removeUserData } from './utils/user.localstorage';
 
 const userData = getUserData() || {};
 const initialState = {
@@ -27,11 +27,18 @@ export const userSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        usersLogout: (state) => {
+            state.loading = false;
+            state.data = {};
+            state.loggedIn = false;
+            state.error = false;
+        },
     },
 });
 
 export const {
     createUser, usersLoading, usersError,
+    usersLogout,
 } = userSlice.actions;
 
 // Selectors
@@ -48,6 +55,18 @@ export const login = (values) => async (dispatch) => {
     }
     dispatch(createUser(data));
     saveUserData(data);
+    return { error, message };
+};
+
+export const userLogout = (values) => async (dispatch) => {
+    dispatch(usersLoading());
+    const { error, message } = await logout(values);
+    if (error) {
+        dispatch(usersError(error));
+        return { error, message };
+    }
+    dispatch(usersLogout());
+    removeUserData();
     return { error, message };
 };
 
