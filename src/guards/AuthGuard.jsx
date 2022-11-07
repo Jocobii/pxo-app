@@ -4,7 +4,7 @@ import { Outlet, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 
 const AuthGuard = () => {
-    const userState = useSelector((state) => state.user.data.name);
+    const userState = useSelector((state) => state.user.data.id);
     return (
         userState ? (
             <MainLayout>
