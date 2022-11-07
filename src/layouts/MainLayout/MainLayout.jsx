@@ -3,9 +3,12 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
 } from '@ant-design/icons';
-import { Layout } from 'antd';
+import {
+    Layout, Row, Col,
+} from 'antd';
 import './index.css';
 import PropTypes from 'prop-types';
+import UserMenu from '../../components/UserMenu';
 import MainContainer from '../../components/MainContainer/MainContainer';
 import SiderMenu from '../../components/SiderMenu/SiderMenu';
 
@@ -22,15 +25,26 @@ export const MainLayout = ({ children }) => {
                         padding: 0,
                     }}
                 >
-                    {
-                        collapsed
-                            ? <MenuUnfoldOutlined className="trigger" onClick={() => setCollapsed(!collapsed)} />
-                            : <MenuFoldOutlined className="trigger" onClick={() => setCollapsed(!collapsed)} />
-                    }
+                    <Row>
+                        <Col span={12}>
+                            {collapsed ? (
+                                <MenuUnfoldOutlined
+                                    className="trigger"
+                                    onClick={() => setCollapsed(!collapsed)}
+                                />
+                            ) : (
+                                <MenuFoldOutlined
+                                    className="trigger"
+                                    onClick={() => setCollapsed(!collapsed)}
+                                />
+                            )}
+                        </Col>
+                        <Col span={12} style={{ alignContent: 'end' }}>
+                            <UserMenu />
+                        </Col>
+                    </Row>
                 </Header>
-                <MainContainer>
-                    {children}
-                </MainContainer>
+                <MainContainer>{children}</MainContainer>
             </Layout>
         </Layout>
     );
