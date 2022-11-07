@@ -4,8 +4,8 @@ import {
     Button, Form, Input, Row, message,
     Card,
 } from 'antd';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../userSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, updateUser } from '../userSlice';
 
 const validateMessages = {
     required: '${label} es requerido',
@@ -16,16 +16,18 @@ const validateMessages = {
 
 export const Profile = () => {
     const userData = useSelector(selectUser);
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     useEffect(() => {
-        console.log('profile');
         if (userData.id) {
             form.setFieldsValue(userData);
         }
     }, [form, userData]);
 
-    const onFinish = (values) => {
-        console.log(values);
+    const onFinish = async (values) => {
+        const data = { ...userData, ...values };
+        const response = await dispatch(updateUser(data));
+        console.log(response);
         message.success('Perfil actualizado');
     };
     return (

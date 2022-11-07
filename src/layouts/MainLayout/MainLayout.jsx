@@ -40,14 +40,7 @@ export const MainLayout = ({ children }) => {
                             )}
                         </Col>
                         <Col span={12} style={{ alignContent: 'end' }}>
-                            <Row
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row-reverse',
-                                }}
-                            >
-                                <UserMenu />
-                            </Row>
+                            <UserMenu />
                         </Col>
                     </Row>
                 </Header>
