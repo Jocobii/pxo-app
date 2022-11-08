@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { signIn, logout } from './services/auth/auth.service';
 import { saveUserData, getUserData, removeUserData } from './utils/user.localstorage';
-import { updatedUser, getAllUsers, createAUser } from './services/user/user.service';
+import {
+    updatedUser, getAllUsers, createAUser,
+    deleteUser,
+} from './services/user/user.service';
 
 const getData = () => {
     const userData = getUserData() || {};
@@ -72,6 +75,11 @@ export const userSlice = createSlice({
             state.loading = false;
             state.error = false;
         },
+        userDelete: (state, action) => {
+            state.list = state.list.filter((item) => item.id !== action.payload);
+            state.loading = false;
+            state.error = false;
+        },
     },
 });
 
@@ -79,7 +87,7 @@ export const {
     usersLoading, usersError, createNewUser,
     createOrUpdateUser, usersList, openModalName,
     usersLogout, usersToken, closeModalName,
-    usersUpdate, updateUsers,
+    usersUpdate, updateUsers, userDelete,
 } = userSlice.actions;
 
 // Selectors
@@ -135,7 +143,6 @@ export const updateMyUser = (values) => async (dispatch) => {
         return { error, message };
     }
     const accessToken = !data?.accessToken ? getUserData().accessToken : '';
-    console.log({ ...data, accessToken });
     saveUserData({ ...data, accessToken });
     dispatch(createOrUpdateUser(data));
     return { error, message };
@@ -144,7 +151,6 @@ export const updateMyUser = (values) => async (dispatch) => {
 export const updateUser = (values) => async (dispatch) => {
     dispatch(usersLoading());
     const { error, message, data } = await updatedUser(values);
-    console.log('user update', error, message, data);
     if (error) {
         dispatch(usersError(error));
         return { error, message };
@@ -172,7 +178,18 @@ export const getUserList = (params) => async (dispatch) => {
         dispatch(usersError(error));
         return { error, message };
     }
-    dispatch(usersList(data));
+    dispatch(usersList(data.data));
+    return { error, message };
+};
+
+export const removeUser = (id) => async (dispatch) => {
+    dispatch(usersLoading());
+    const { error, message } = await deleteUser(id);
+    if (error) {
+        dispatch(usersError(error));
+        return { error, message };
+    }
+    dispatch(userDelete(id));
     return { error, message };
 };
 

@@ -22,6 +22,7 @@ const getDefaultHeaders = () => {
 
 const errorHandler = (response) => {
     // Logica para hacer reflesh del token
+    console.log(getDefaultHeaders());
     if (response.response.status === 401) {
         console.log('Token Expired');
     }
@@ -50,7 +51,8 @@ const fetcher = {
         .then((response) => response.data)
         .catch(errorHandler),
     delete: (url, data) => request
-        .delete(url, data, {
+        .delete(url, {
+            data,
             headers: getDefaultHeaders(),
         })
         .then((response) => response.data)
