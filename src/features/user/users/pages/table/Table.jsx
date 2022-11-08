@@ -1,18 +1,31 @@
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Row, Button } from 'antd';
+import { Row, Button, message } from 'antd';
 import GenericTable from '../../../../../components/GenericTable/GenericTable';
-import { getUserList, openModalName } from '../../../userSlice';
+import {
+    getUserList, openModalName,
+    removeUser,
+} from '../../../userSlice';
 import UserModal from './components/Modal';
 
 const Table = () => {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.user.list);
+
     const getAllUser = useCallback(() => {
         dispatch(getUserList());
     }, [dispatch]);
 
     const openDrawer = (id) => dispatch(openModalName({ modalName: 'USER_MODAL', index: id }));
+
+    const handleDelete = async (id) => {
+        const { error, message: msg } = await dispatch(removeUser(id));
+        if (error) {
+            message.error(msg);
+            return;
+        }
+        message.success(msg);
+    };
 
     useEffect(() => {
         getAllUser();
@@ -57,7 +70,7 @@ const Table = () => {
         },
         {
             type: 'delete',
-            handle: (id) => console.log(id),
+            handle: (id) => handleDelete(id),
         },
     ];
 
@@ -75,6 +88,7 @@ const Table = () => {
             <GenericTable
                 columns={columns}
                 controls={controls}
+                tableKey="email"
                 dataSource={data}
             />
         </>

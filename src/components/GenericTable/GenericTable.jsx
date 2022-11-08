@@ -119,6 +119,7 @@ const SmartTable = ({
                 pagination={pagination}
                 onChange={onChange}
                 loading={loading}
+                tableKey="id"
                 columns={getColumns()}
                 locale={{
                     emptyText: (
@@ -140,7 +141,7 @@ SmartTable.propTypes = {
     dataSource: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     pagination: PropTypes.shape({}),
     loading: PropTypes.bool,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     restProps: PropTypes.shape({}),
     editControls: PropTypes.shape({}),
     selectFilters: PropTypes.shape({}),
@@ -152,8 +153,9 @@ SmartTable.defaultProps = {
     tableKey: '',
     editControls: null,
     loading: false,
-    pagination: 1,
+    pagination: {},
     selectFilters: {},
+    onChange: () => {},
 };
 
 export default SmartTable;

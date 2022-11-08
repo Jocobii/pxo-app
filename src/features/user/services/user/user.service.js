@@ -14,3 +14,8 @@ export const createAUser = (props) => fetcher
     .post('/auth/sign-up', props)
     .then((data) => data)
     .catch((error) => error);
+
+export const deleteUser = (id) => fetcher
+    .delete(`/users/${id}`)
+    .then((data) => data)
+    .catch((error) => error);
