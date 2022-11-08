@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { signIn, logout } from './services/auth/auth.service';
 import { saveUserData, getUserData, removeUserData } from './utils/user.localstorage';
+import mapPagination from '../../utils/mapPagination';
 import {
     updatedUser, getAllUsers, createAUser,
     deleteUser,
@@ -20,6 +21,7 @@ const initialState = {
     loading: false,
     data: userData,
     loggedIn: !!userData.id,
+    pagination: {},
     list: [],
     modalName: '',
     index: '',
@@ -55,7 +57,8 @@ export const userSlice = createSlice({
             state.accessToken = accessToken;
         },
         usersList: (state, action) => {
-            state.list = action.payload;
+            state.list = action.payload.data;
+            state.pagination = action.payload.pagination;
             state.loading = false;
         },
         openModalName: (state, action) => {
@@ -68,10 +71,16 @@ export const userSlice = createSlice({
         },
         createNewUser: (state, action) => {
             state.list.unshift(action.payload);
+            state.loading = false;
         },
         updateUsers: (state, action) => {
-            const dataFiltered = state.list.filter((item) => item.id !== action.payload.id);
-            state.list = [...dataFiltered, action.payload];
+            const dataFiltered = state.list.map((item) => {
+                if (item.id === action.payload.id) {
+                    return action.payload;
+                }
+                return item;
+            });
+            state.list = dataFiltered;
             state.loading = false;
             state.error = false;
         },
@@ -96,7 +105,8 @@ export const selectUserFullName = (state) => `${state.user.data.first_name} ${st
 export const selectModalName = (state) => state.user.modalName;
 export const selectUserId = (state) => state.user.index;
 export const selectUserList = (state) => state.user.list;
-
+export const selectPagination = (state) => state.user.pagination;
+export const selectLoading = (state) => state.user.loading;
 // memoized selectors
 
 export const selectUserById = createSelector(
@@ -173,12 +183,17 @@ export const userLogout = (values) => async (dispatch) => {
 
 export const getUserList = (params) => async (dispatch) => {
     dispatch(usersLoading());
-    const { error, message, data } = await getAllUsers(params);
+    const {
+        error, message, data, info,
+    } = await getAllUsers(params);
+
     if (error) {
         dispatch(usersError(error));
         return { error, message };
     }
-    dispatch(usersList(data.data));
+    const pagination = mapPagination(info);
+
+    dispatch(usersList({ data, pagination }));
     return { error, message };
 };
 

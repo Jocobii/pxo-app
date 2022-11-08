@@ -109,6 +109,7 @@ const SmartTable = ({
         }
         return transformColumns;
     };
+
     return (
         <Card>
             <AntTable
@@ -119,7 +120,7 @@ const SmartTable = ({
                 pagination={pagination}
                 onChange={onChange}
                 loading={loading}
-                tableKey="id"
+                rowKey={(record) => record?.id}
                 columns={getColumns()}
                 locale={{
                     emptyText: (

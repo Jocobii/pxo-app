@@ -32,8 +32,8 @@ const errorHandler = (response) => {
 const fetcher = {
     get: (url, props) => request
         .get(url, {
-            headers: getDefaultHeaders(),
             params: props,
+            headers: getDefaultHeaders(),
         })
         .then((response) => response.data)
         .catch(errorHandler),

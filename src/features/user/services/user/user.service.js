@@ -7,7 +7,7 @@ export const updatedUser = (props) => fetcher
 
 export const getAllUsers = (props) => fetcher
     .get('/users/list', props)
-    .then((data) => data)
+    .then((data) => data.data)
     .catch((error) => error);
 
 export const createAUser = (props) => fetcher
