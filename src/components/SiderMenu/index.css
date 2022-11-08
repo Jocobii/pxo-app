@@ -19,3 +19,14 @@
   .site-layout .site-layout-background {
     background: #fff;
   }
+
+  .logo {
+    height: 32px;
+    margin: 16px;
+  }
+
+  .divLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center
+  }

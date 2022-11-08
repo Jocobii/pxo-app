@@ -9,10 +9,10 @@ import 'antd/dist/antd.min.css';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
+// Poner <React.StrictMode>
+
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <Navegation />
-        </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <Navegation />
+    </Provider>,
 );

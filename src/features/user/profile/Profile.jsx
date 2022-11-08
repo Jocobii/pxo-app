@@ -5,7 +5,7 @@ import {
     Card,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUser, updateUser } from '../userSlice';
+import { selectUser, updateMyUser } from '../userSlice';
 
 const validateMessages = {
     required: '${label} es requerido',
@@ -26,8 +26,11 @@ export const Profile = () => {
 
     const onFinish = async (values) => {
         const data = { ...userData, ...values };
-        const response = await dispatch(updateUser(data));
-        console.log(response);
+        const { error, message: msg } = await dispatch(updateMyUser(data));
+        if (error) {
+            message.error(msg || 'Error al actualizar el usuario');
+            return;
+        }
         message.success('Perfil actualizado');
     };
     return (
@@ -41,7 +44,7 @@ export const Profile = () => {
                     form={form}
                 >
                     <Form.Item
-                        name="firstName"
+                        name="first_name"
                         label="Nombre"
                         rules={[
                             {
@@ -51,11 +54,11 @@ export const Profile = () => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item name="middleName" label="Segundo nombre">
+                    <Form.Item name="middle_name" label="Segundo nombre">
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name="firstLastName"
+                        name="first_last_name"
                         label="Apellido paterno"
                         rules={[
                             {
@@ -66,13 +69,8 @@ export const Profile = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        name="secondLastName"
+                        name="second_last_name"
                         label="Apellido materno"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
                     >
                         <Input />
                     </Form.Item>
@@ -100,7 +98,7 @@ export const Profile = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            Guardar
                         </Button>
                     </Form.Item>
                 </Form>
