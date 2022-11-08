@@ -5,4 +5,12 @@ export const updatedUser = (props) => fetcher
     .then((data) => data)
     .catch((error) => error);
 
-export const getUser = async () => fetch('http://localhost:5000/api/v1/users').then((res) => res.json());
+export const getAllUsers = (props) => fetcher
+    .get('/users/list', props)
+    .then((data) => data)
+    .catch((error) => error);
+
+export const createAUser = (props) => fetcher
+    .post('/auth/sign-up', props)
+    .then((data) => data)
+    .catch((error) => error);

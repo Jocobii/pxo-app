@@ -13,7 +13,7 @@ import { login, selectUser } from '../userSlice';
 export const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const userId = useSelector(selectUser).id;
+    const userId = useSelector(selectUser)?.id;
 
     useEffect(() => {
         if (userId) {

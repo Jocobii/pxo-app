@@ -48,6 +48,13 @@ export const privateRoutes = [
         path: 'catalogos',
         Component: Counter,
         name: 'Catalogos',
+        children: [
+            {
+                label: 'Usuarios',
+                key: 'menu-users',
+                path: 'users',
+            },
+        ],
     },
     {
         to: '/reclamos/*',

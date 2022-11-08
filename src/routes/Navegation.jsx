@@ -10,6 +10,7 @@ import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';
 import Clientes from '../features/clientes';
 import Cotizacion from '../features/cotizacion';
 import Profile from '../features/user/profile';
+import Users from '../features/user/users';
 
 const Navegation = () => (
     <BrowserRouter>
@@ -24,6 +25,7 @@ const Navegation = () => (
                 <Route path="/cliente/*" element={<Clientes />} />
                 <Route path="/cotizacion/*" element={<Cotizacion />} />
                 <Route path="/user/*" element={<Profile />} />
+                <Route path="/users/*" element={<Users />} />
             </Route>
         </Routes>
     </BrowserRouter>

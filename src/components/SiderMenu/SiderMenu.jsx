@@ -5,13 +5,16 @@ import './index.css';
 import { useNavigate } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { privateRoutes } from '../../routes/routes';
+import logo from '../../assets/logo512.png';
 
 const { Sider } = Layout;
 const SiderMenu = ({ collapsed }) => {
     const navigate = useNavigate();
     return (
         <Sider trigger={null} collapsible collapsed={collapsed}>
-            <div className="logo" />
+            <div className="divLogo">
+                <img className="logo" src={logo} alt="logo-img" />
+            </div>
             <Menu
                 theme="dark"
                 mode="inline"
@@ -20,8 +23,14 @@ const SiderMenu = ({ collapsed }) => {
                     key: route.path,
                     icon: <UserOutlined />,
                     label: `${route.name}`,
-                    onClick: () => navigate(route.path, { replace: true }),
-                    children: route?.children,
+                    children: route?.children?.map((child) => ({
+                        key: child.path,
+                        label: `${child.label}`,
+                        path: child.path,
+                        onClick: () => navigate(child.path, { replace: true }),
+                    })),
+                    onClick: () => (!route?.children?.length
+                        ? navigate(route.path, { replace: true }) : null),
                 }))}
             />
         </Sider>
