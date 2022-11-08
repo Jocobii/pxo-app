@@ -21,7 +21,7 @@ const UserModal = () => {
     const index = useSelector((state) => state.user.index);
     const user = index ? userList.find((e) => e.id === Number(index)) : null;
     const isVisible = modalName === 'USER_MODAL';
-    console.log(user);
+
     useEffect(() => {
         if (index) {
             form.setFieldsValue(user);
