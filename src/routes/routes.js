@@ -33,8 +33,8 @@ export const privateRoutes = [
         icon: IconSwitcher('user'),
     },
     {
-        to: '/cotizacion/*',
-        path: 'cotizacion',
+        to: '/quote/*',
+        path: 'quote',
         Component: NotFound,
         name: 'Cotización',
         icon: IconSwitcher('quote'),

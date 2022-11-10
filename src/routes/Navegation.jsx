@@ -23,7 +23,7 @@ const Navegation = () => (
                 <Route path="/*" element={<NotFound />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/customer/*" element={<Customer />} />
-                <Route path="/cotizacion/*" element={<Cotizacion />} />
+                <Route path="/quote/*" element={<Cotizacion />} />
                 <Route path="/user/*" element={<Profile />} />
                 <Route path="/users/*" element={<Users />} />
             </Route>
