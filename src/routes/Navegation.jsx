@@ -7,8 +7,8 @@ import AuthGuard from '../guards/AuthGuard';
 import Home from '../pages/home/Home';
 import NotFound from '../pages/notFound/NotFound';
 import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';
-import Customer from '../features/clientes';
-import Cotizacion from '../features/cotizacion';
+import Customer from '../features/customers';
+import Cotizacion from '../features/quotes';
 import Profile from '../features/user/profile';
 import Users from '../features/user/users';
 
