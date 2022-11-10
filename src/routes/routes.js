@@ -1,5 +1,4 @@
 import Login from '../features/user/login';
-import Counter from '../features/counter/Counter';
 import NotFound from '../pages/notFound/NotFound';
 import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';
 
@@ -26,27 +25,27 @@ export const publicRoutes = [
 
 export const privateRoutes = [
     {
-        to: '/cliente/*',
-        path: '/cliente',
-        Component: Counter,
+        to: '/customer/*',
+        path: '/customer',
+        Component: NotFound,
         name: 'Clientes',
     },
     {
         to: '/cotizacion/*',
         path: 'cotizacion',
-        Component: Counter,
+        Component: NotFound,
         name: 'Cotización',
     },
     {
         to: '/polizas/*',
         path: 'polizas',
-        Component: Counter,
+        Component: NotFound,
         name: 'Polizas',
     },
     {
         to: '/catalogos/*',
         path: 'catalogos',
-        Component: Counter,
+        Component: NotFound,
         name: 'Catalogos',
         children: [
             {
@@ -59,7 +58,7 @@ export const privateRoutes = [
     {
         to: '/reclamos/*',
         path: 'reclamos',
-        Component: Counter,
+        Component: NotFound,
         name: 'Reclamos',
     },
 ];
