@@ -13,8 +13,12 @@ import MainContainer from '../../components/MainContainer/MainContainer';
 import SiderMenu from '../../components/SiderMenu/SiderMenu';
 
 const { Header } = Layout;
+
+const getCollapsed = () => !!JSON.parse(localStorage.getItem('@collapsed'));
+const saveCollapsed = () => localStorage.setItem('@collapsed', !JSON.parse(localStorage.getItem('@collapsed')));
+
 export const MainLayout = ({ children }) => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(getCollapsed);
     return (
         <Layout>
             <SiderMenu collapsed={collapsed} />
@@ -30,12 +34,18 @@ export const MainLayout = ({ children }) => {
                             {collapsed ? (
                                 <MenuUnfoldOutlined
                                     className="trigger"
-                                    onClick={() => setCollapsed(!collapsed)}
+                                    onClick={() => {
+                                        setCollapsed(!collapsed);
+                                        saveCollapsed();
+                                    }}
                                 />
                             ) : (
                                 <MenuFoldOutlined
                                     className="trigger"
-                                    onClick={() => setCollapsed(!collapsed)}
+                                    onClick={() => {
+                                        setCollapsed(!collapsed);
+                                        saveCollapsed();
+                                    }}
                                 />
                             )}
                         </Col>

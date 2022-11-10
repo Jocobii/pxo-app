@@ -1,79 +1,112 @@
-import { Space, Table as AntTable, Tag } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Tabs, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import GenericTable from '../../../../components/GenericTable/GenericTable';
+import { selectCustomerList } from '../../customerSlice';
+import customerModule from '../../router';
+
+const personasFisicas = [
+    {
+        id: '1',
+        type: 'Fisica',
+        fullName: 'Alexander Vazquez Jocobi',
+        cellPhone: '331 123 4567',
+    },
+    {
+        id: '2',
+        type: 'Fisica',
+        fullName: 'Jose Perez Hernandez',
+        cellPhone: '331 123 4567',
+    },
+    {
+        id: '3',
+        type: 'Fisica',
+        fullName: 'Axxel Romero Perez',
+        cellPhone: '331 123 4567',
+    },
+];
+
+const personasMorales = [
+    {
+        id: '1',
+        type: 'Moral',
+        fullName: 'Manuel Lopez Flores',
+        cellPhone: '331 123 5321',
+    },
+    {
+        id: '2',
+        type: 'Moral',
+        fullName: 'Angela Rodriguez Bravo',
+        cellPhone: '331 123 7548',
+    },
+    {
+        id: '3',
+        type: 'Moral',
+        fullName: 'Daniela Herrera Moreno',
+        cellPhone: '331 123 1256',
+    },
+];
 
 const columns = [
     {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Tipo',
+        dataIndex: 'type',
+        key: 'type',
         render: (text) => <p>{text}</p>,
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
+        title: 'Nombre completo',
+        dataIndex: 'fullName',
+        key: 'fullName',
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-    {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-    },
-    {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <p>
-                    Invite
-                    {record.name}
-                </p>
-                <p>Delete</p>
-            </Space>
-        ),
+        title: 'Teléfono',
+        dataIndex: 'cellPhone',
+        key: 'cellPhone',
     },
 ];
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-    },
-    {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-    },
-];
-const Table = () => <AntTable columns={columns} dataSource={data} />;
+
+const Table = () => {
+    const dispatch = useDispatch();
+    const data = useSelector(selectCustomerList);
+    const navigate = useNavigate();
+    const controls = [
+        {
+            type: 'edit',
+            handle: (id) => navigate(customerModule.forma(id)),
+        },
+        {
+            type: 'delete',
+            handle: (id) => dispatch({ type: 'customer/customerDelete', payload: id }),
+        },
+    ];
+
+    useEffect(() => {
+        if (data.length === 0) {
+            dispatch({ type: 'customer/setData', payload: personasFisicas });
+        }
+    }, [data, dispatch]);
+
+    const handleChangeTab = (key) => {
+        if (key === 'item-2') {
+            dispatch({ type: 'customer/setData', payload: personasMorales });
+            return;
+        }
+        dispatch({ type: 'customer/setData', payload: personasFisicas });
+    };
+
+    const items = [
+        { label: 'Fisica', key: 'item-1', children: <GenericTable controls={controls} columns={columns} dataSource={data} /> },
+        { label: 'Moral', key: 'item-2', children: <GenericTable controls={controls} columns={columns} dataSource={data} /> },
+    ];
+
+    return (
+        <Tabs
+            tabBarExtraContent={<Button type="primary">Agregar</Button>}
+            onChange={handleChangeTab}
+            items={items}
+        />
+    );
+};
 export default Table;
