@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UserOutlined } from '@ant-design/icons';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
@@ -21,10 +20,11 @@ const SiderMenu = ({ collapsed }) => {
                 defaultSelectedKeys={['1']}
                 items={privateRoutes.map((route) => ({
                     key: route.path,
-                    icon: <UserOutlined />,
+                    icon: route?.icon,
                     label: `${route.name}`,
                     children: route?.children?.map((child) => ({
                         key: child.path,
+                        icon: child?.icon,
                         label: `${child.label}`,
                         path: child.path,
                         onClick: () => navigate(child.path, { replace: true }),

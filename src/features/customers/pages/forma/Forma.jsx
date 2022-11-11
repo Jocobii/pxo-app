@@ -158,15 +158,17 @@ const Forma = () => {
         },
     ];
     return (
-        <Form
-            form={form}
-            layout="vertical"
-        >
-            <Row gutter={24}>
-                <FormFields fields={[...personalFields, ...addressFields]} />
-            </Row>
+        <>
+            <Form
+                form={form}
+                layout="vertical"
+            >
+                <Row gutter={24}>
+                    <FormFields fields={[...personalFields, ...addressFields]} />
+                </Row>
+            </Form>
             <FooterControl form={form} />
-        </Form>
+        </>
     );
 };
 

@@ -37,6 +37,7 @@ const SmartTable = ({
         key: 'x',
         width: 50 * controls.length,
         align: 'center',
+        fixed: controls[0]?.fixed ? controls[0]?.fixed : null,
         render: (_text, record) => (
             <ControlList
                 rowIndex={`record-${record.id}`}
@@ -137,7 +138,9 @@ const SmartTable = ({
 
 SmartTable.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    controls: PropTypes.arrayOf(PropTypes.shape({})),
+    controls: PropTypes.arrayOf(PropTypes.shape({
+        fixed: PropTypes.string,
+    })),
     tableKey: PropTypes.string,
     dataSource: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     pagination: PropTypes.shape({}),

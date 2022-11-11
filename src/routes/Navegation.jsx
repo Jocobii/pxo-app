@@ -4,11 +4,11 @@ import {
 } from 'react-router-dom';
 import Login from '../features/user';
 import AuthGuard from '../guards/AuthGuard';
-import Home from '../pages/home/Home';
+import Home from '../pages/Home';
 import NotFound from '../pages/notFound/NotFound';
 import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';
-import Customer from '../features/clientes';
-import Cotizacion from '../features/cotizacion';
+import Customer from '../features/customers';
+import Cotizacion from '../features/quotes';
 import Profile from '../features/user/profile';
 import Users from '../features/user/users';
 
@@ -23,7 +23,7 @@ const Navegation = () => (
                 <Route path="/*" element={<NotFound />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/customer/*" element={<Customer />} />
-                <Route path="/cotizacion/*" element={<Cotizacion />} />
+                <Route path="/quote/*" element={<Cotizacion />} />
                 <Route path="/user/*" element={<Profile />} />
                 <Route path="/users/*" element={<Users />} />
             </Route>
