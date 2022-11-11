@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import Login from '../features/user';
 import AuthGuard from '../guards/AuthGuard';
-import Home from '../pages/home/Home';
+import Home from '../pages/Home';
 import NotFound from '../pages/notFound/NotFound';
 import RecoveryPassword from '../pages/recovery-password/RecoveryPassword';
 import Customer from '../features/customers';

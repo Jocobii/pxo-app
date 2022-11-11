@@ -9,21 +9,20 @@ import FormFields from '../../../../components/Form';
 import FooterControl from '../../../../components/FooterControl/FooterControl';
 
 const initData = {
-    name: 'Alexander',
-    first_last_name: 'Vazquez',
-    second_last_name: 'Jocobi',
-    email: 'adalbertojocobi@gmail.com',
+    name: 'Manuel',
+    first_last_name: 'Lopez',
+    second_last_name: 'Flores',
+    email: 'manuellopez@gmail.com',
     rfc: 'VAJA980101',
     cellphone: '3311234567',
     type: 1,
-    street: 'Calle 1',
-    colonia: 'Colonia 1',
-    exterior_number: '7403',
-    interior_number: '1',
-    postal_code: '12345',
-    city: 'Guadalajara',
-    state: 'Jalisco',
-    country: 1,
+    brand: 'Honda',
+    model: 'Civic',
+    group: 1,
+    subGroup: 1,
+    year: '2019',
+    mileage: '10000',
+    series: 'ASDFMSADFSADF',
 };
 
 const Forma = () => {
@@ -108,17 +107,29 @@ const Forma = () => {
             opts: {},
         },
         {
-            label: 'Numero exterior',
-            col: 6,
-            scope: 'exterior_number',
-            component: <Input placeholder="Numero exterior" />,
-            opts: {},
-        },
-        {
             label: 'Grupo',
             col: 6,
             scope: 'group',
-            component: <Input placeholder="Grupo" />,
+            component: (
+                <Select
+                    placeholder="Grupo"
+                >
+                    <Select.Option value={1}>HONDA TRADICIONES</Select.Option>
+                </Select>
+            ),
+            opts: {},
+        },
+        {
+            label: 'Sub grupo',
+            col: 6,
+            scope: 'subGroup',
+            component: (
+                <Select
+                    placeholder="Sub grupo"
+                >
+                    <Select.Option value={1}>OPTIMA</Select.Option>
+                </Select>
+            ),
             opts: {},
         },
         {
@@ -131,30 +142,15 @@ const Forma = () => {
         {
             label: 'Kilometraje',
             col: 6,
-            scope: 'kg',
+            scope: 'mileage',
             component: <Input placeholder="Kilometraje" />,
             opts: {},
         },
         {
-            label: 'Estado',
+            label: 'Serie',
             col: 6,
-            scope: 'state',
-            component: <Input placeholder="Estado" />,
-            opts: {},
-        },
-        {
-            label: 'País',
-            col: 6,
-            scope: 'country',
-            component: (
-                <Select
-                    placeholder="País"
-                >
-                    <Select.Option key={1} value={1}>Mexico</Select.Option>
-                    <Select.Option key={2} value={2}>USA</Select.Option>
-                    <Select.Option key={3} value={3}>Canada</Select.Option>
-                </Select>
-            ),
+            scope: 'series',
+            component: <Input placeholder="Serie" />,
             opts: {},
         },
     ];
