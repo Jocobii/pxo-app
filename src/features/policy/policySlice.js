@@ -11,8 +11,8 @@ const initialState = {
     error: null,
 };
 
-export const productSlice = createSlice({
-    name: 'product',
+export const policySlice = createSlice({
+    name: 'policy',
     initialState,
     reducers: {
         setLoading: (state, action) => {
@@ -21,7 +21,7 @@ export const productSlice = createSlice({
     },
 });
 
-export const { setLoading } = productSlice.actions;
+export const { setLoading } = policySlice.actions;
 
 // Selectors
 
@@ -29,4 +29,4 @@ export const { setLoading } = productSlice.actions;
 
 // Define a thunk that dispatches those action creators
 
-export default productSlice.reducer;
+export default policySlice.reducer;

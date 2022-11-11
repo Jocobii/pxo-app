@@ -11,6 +11,7 @@ import Customer from '../features/customers';
 import Cotizacion from '../features/quotes';
 import Profile from '../features/user/profile';
 import Users from '../features/user/users';
+import Policy from '../features/policy';
 
 const Navegation = () => (
     <BrowserRouter>
@@ -26,6 +27,7 @@ const Navegation = () => (
                 <Route path="/quote/*" element={<Cotizacion />} />
                 <Route path="/user/*" element={<Profile />} />
                 <Route path="/users/*" element={<Users />} />
+                <Route path="/policy/*" element={<Policy />} />
             </Route>
         </Routes>
     </BrowserRouter>

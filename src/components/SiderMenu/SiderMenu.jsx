@@ -4,7 +4,7 @@ import './index.css';
 import { useNavigate } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { privateRoutes } from '../../routes/routes';
-import logo from '../../assets/logo512.png';
+import logo from '../../assets/logo.png';
 
 const { Sider } = Layout;
 const SiderMenu = ({ collapsed }) => {
