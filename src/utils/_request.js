@@ -1,5 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import axios from 'axios';
-import { getUserData } from '../features/user/utils/user.localstorage';
+import { message } from 'antd';
+import { getUserData, saveUserData } from '../features/user/utils/user.localstorage';
 
 const BASE_URL = 'http://localhost:5000/api/v1';
 
@@ -9,20 +11,44 @@ const request = axios.create({
     responseType: 'json',
 });
 
-// Token Expired
-// eslint-disable-next-line max-len
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImlhdCI6MTY2NzY4MTY5MSwiZXhwIjoxNjY3Njg1MjkxfQ.JyuByoD4yrpFElj9XTcsM9lF0zNZpgcCwxPE4_uHKqQ
+request.interceptors.request.use(
+    (config) => {
+        // eslint-disable-next-line no-param-reassign
+        config.headers = {
+            Authorization: `Bearer ${getUserData()?.accessToken}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        };
+        return config;
+    },
+    (error) => {
+        Promise.reject(error);
+    },
+);
 
-const getDefaultHeaders = () => {
-    const accessToken = getUserData()?.accessToken;
-    return {
-        Authorization: `Bearer ${accessToken}`,
-    };
+const refreshToken = async () => {
+    const userData = getUserData();
+    const { data } = await request.post('/auth/refresh-token', { currentToken: userData?.accessToken });
+    if (data.error) return null;
+    if (data.data.accessToken) saveUserData({ ...userData, accessToken: data.data.accessToken });
+    return data.accessToken;
 };
 
+// Response interceptor for API calls
+request.interceptors.response.use((response) => response, async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+        console.log('Refresh Token');
+        originalRequest._retry = true;
+        const accessToken = await refreshToken();
+        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        return request(originalRequest);
+    }
+    message.error('Error al refrescar el token, por favor vuelve a inciar sesión');
+    return Promise.reject(error);
+});
+
 const errorHandler = (response) => {
-    // Logica para hacer reflesh del token
-    console.log(getDefaultHeaders());
     if (response.response.status === 401) {
         console.log('Token Expired');
     }
@@ -33,27 +59,23 @@ const fetcher = {
     get: (url, props) => request
         .get(url, {
             params: props,
-            headers: getDefaultHeaders(),
         })
         .then((response) => response.data)
         .catch(errorHandler),
 
     post: (url, data) => request
         .post(url, data, {
-            headers: getDefaultHeaders(),
         })
         .then((response) => response.data)
         .catch(errorHandler),
     put: (url, data) => request
         .put(url, data, {
-            headers: getDefaultHeaders(),
         })
         .then((response) => response.data)
         .catch(errorHandler),
     delete: (url, data) => request
         .delete(url, {
             data,
-            headers: getDefaultHeaders(),
         })
         .then((response) => response.data)
         .catch(errorHandler),
