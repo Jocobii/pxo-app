@@ -186,7 +186,6 @@ export const getUserList = (params) => async (dispatch) => {
     const {
         error, message, data, info,
     } = await getAllUsers(params);
-
     if (error) {
         dispatch(usersError(error));
         return { error, message };

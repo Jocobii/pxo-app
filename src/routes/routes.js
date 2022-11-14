@@ -40,8 +40,8 @@ export const privateRoutes = [
         icon: IconSwitcher('quote'),
     },
     {
-        to: '/polizas/*',
-        path: 'polizas',
+        to: '/policy/*',
+        path: 'policy',
         Component: NotFound,
         name: 'Polizas',
         icon: IconSwitcher('policy'),
