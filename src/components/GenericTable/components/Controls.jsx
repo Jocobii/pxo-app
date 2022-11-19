@@ -30,7 +30,7 @@ const getTextByType = (type, attr) => {
         },
         delete: {
             title: 'Eliminar',
-            btnType: 'danger',
+            btnType: 'primary',
             icon: 'delete',
             confirm: true,
             extra: '¿Estas seguro?',
@@ -67,6 +67,7 @@ const ControlListComponent = ({
                         }
                     >
                         <Button
+                            danger={o.type === 'delete'}
                             type={o.btnType || getTextByType(o.type, 'btnType')}
                             shape="circle"
                             size="small"
