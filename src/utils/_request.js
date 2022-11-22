@@ -1,12 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import axios from 'axios';
-import { message } from 'antd';
 import { getUserData, saveUserData } from '../features/user/utils/user.localstorage';
 
-const BASE_URL = 'http://localhost:5000/api/v1';
-
 const request = axios.create({
-    baseURL: BASE_URL,
+    baseURL: process.env.REACT_APP_BASE_URL,
     withCredentials: false,
     responseType: 'json',
 });
@@ -44,7 +41,6 @@ request.interceptors.response.use((response) => response, async (error) => {
         axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         return request(originalRequest);
     }
-    message.error('Error al refrescar el token, por favor vuelve a inciar sesión');
     return Promise.reject(error);
 });
 

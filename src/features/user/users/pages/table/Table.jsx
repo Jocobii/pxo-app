@@ -83,6 +83,7 @@ const Table = () => {
     const controls = [
         {
             type: 'edit',
+            fixed: 'right',
             handle: (id) => openDrawer(id),
         },
         {

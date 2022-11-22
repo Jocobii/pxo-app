@@ -116,9 +116,6 @@ const Table = () => {
                 controls={controls}
                 columns={columns}
                 dataSource={quote}
-                scroll={{
-                    x: 1300,
-                }}
             />
         </>
     );

@@ -4,7 +4,7 @@ import {
     LogoutOutlined, UserOutlined, ProfileOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu, message } from 'antd';
+import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { getUserData } from '../../features/user/utils/user.localstorage';
 import { userLogout, selectUserFullName } from '../../features/user/userSlice';
@@ -16,11 +16,7 @@ export const UserMenu = () => {
     const navigate = useNavigate();
     const userName = useSelector(selectUserFullName);
     const logout = async () => {
-        const { error } = await dispatch(userLogout(getUserEmail()));
-        if (error) {
-            message.error('Error al cerrar sesión');
-            return;
-        }
+        await dispatch(userLogout(getUserEmail()));
         navigate('/login', { replace: true });
     };
 

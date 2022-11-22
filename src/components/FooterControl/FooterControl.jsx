@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import Dynamic from './Dynamic';
 // eslint-disable-next-line react/prop-types
-const FooterControl = ({ form }) => (
+const FooterControl = ({ form, onFinish }) => (
     <Dynamic dynamic>
         {
             <Form form={form}>
@@ -68,6 +68,7 @@ const FooterControl = ({ form }) => (
                                             </Button>
                                             <Button
                                                 type="primary"
+                                                onClick={() => onFinish()}
                                                 style={{ margin: 8 }}
                                                 icon={<SaveOutlined />}
                                             >

@@ -131,6 +131,9 @@ const SmartTable = ({
                         />
                     ),
                 }}
+                scroll={{
+                    x: 1300,
+                }}
             />
         </Card>
     );

@@ -69,7 +69,7 @@ class Dynamic extends PureComponent {
         return (
             <div
                 style={{
-                    padding: 10,
+                    height: '9%',
                     width,
                     backgroundColor: '#FAFAFA',
                     position: 'fixed',

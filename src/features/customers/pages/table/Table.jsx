@@ -73,6 +73,7 @@ const Table = () => {
     const navigate = useNavigate();
     const controls = [
         {
+            fixed: 'right',
             type: 'edit',
             handle: (id) => navigate(customerModule.forma(id)),
         },

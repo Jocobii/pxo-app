@@ -22,7 +22,6 @@ const initData = {
     subGroup: 1,
     year: '2019',
     mileage: '10000',
-    series: 'ASDFMSADFSADF',
 };
 
 const Forma = () => {
@@ -32,6 +31,13 @@ const Forma = () => {
     form.setFieldsValue(initData);
     const personalFields = [
         { divider: <Divider orientation="left">Datos personales</Divider> },
+        {
+            label: 'Correo electrónico',
+            col: 6,
+            scope: 'email',
+            component: <Input placeholder="Correo electrónico" />,
+            opts: {},
+        },
         {
             label: 'Nombre',
             col: 6,
@@ -51,13 +57,6 @@ const Forma = () => {
             col: 6,
             scope: 'second_last_name',
             component: <Input placeholder="Apellido materno" />,
-            opts: {},
-        },
-        {
-            label: 'Correo electrónico',
-            col: 6,
-            scope: 'email',
-            component: <Input placeholder="Correo electrónico" />,
             opts: {},
         },
         {
