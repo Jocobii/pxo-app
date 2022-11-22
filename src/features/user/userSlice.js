@@ -174,6 +174,7 @@ export const userLogout = (values) => async (dispatch) => {
     const { error, message } = await logout(values);
     if (error) {
         dispatch(usersError(error));
+        removeUserData();
         return { error, message };
     }
     dispatch(usersLogout());
