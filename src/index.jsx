@@ -5,6 +5,7 @@ import { store } from './redux/store';
 import Navegation from './routes/Navegation';
 import './index.css';
 import 'antd/dist/reset.css';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -13,6 +14,8 @@ const root = createRoot(container);
 
 root.render(
     <Provider store={store}>
-        <Navegation />
+        <ErrorBoundary>
+            <Navegation />
+        </ErrorBoundary>
     </Provider>,
 );
