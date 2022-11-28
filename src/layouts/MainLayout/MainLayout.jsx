@@ -11,13 +11,14 @@ import PropTypes from 'prop-types';
 import UserMenu from '../../components/UserMenu';
 import MainContainer from '../../components/MainContainer/MainContainer';
 import SiderMenu from '../../components/SiderMenu/SiderMenu';
+import initDayjs from '../../utils/dayjsSetup';
 
 const { Header } = Layout;
-
 const getCollapsed = () => !!JSON.parse(localStorage.getItem('@collapsed'));
 const saveCollapsed = () => localStorage.setItem('@collapsed', !JSON.parse(localStorage.getItem('@collapsed')));
 
 export const MainLayout = ({ children }) => {
+    initDayjs();
     const [collapsed, setCollapsed] = useState(getCollapsed);
     return (
         <Layout>

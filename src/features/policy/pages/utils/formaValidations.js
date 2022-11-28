@@ -1,11 +1,11 @@
 import debounce from 'lodash.debounce';
-import { checkPolicyField } from '../services';
+import policyServices from '../services';
 import { validateIfExistsByField } from '../../../../utils/validateField';
 
 // eslint-disable-next-line import/prefer-default-export
 export const validatePolicyNumber = debounce((_, value, callback) => {
     if (!value) return;
-    checkPolicyField('number_extension', value)
+    policyServices.checkPolicyField('number_extension', value)
         .then(({ error, message }) => {
             if (error) {
                 callback(message);
