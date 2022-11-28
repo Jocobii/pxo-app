@@ -1,11 +1,18 @@
-export default function mapValues(values) {
+import dayjs from 'dayjs';
+
+export function mapValues(values) {
     return {
+        id: values.id || null,
         number_extension: values.number_extension,
         date_issue: values.date_issue,
         beginning_effective_date: values.beginning_effective_date,
         end_effective_date: values.end_effective_date,
         agency_id: values.agency_id,
+        policy_type_id: values.policy_type_id,
+        bank_id: values.bank_id,
+        warranty_id: values.warranty_id,
         car: {
+            id: values.car_id,
             category_id: values.category_id,
             version_id: values.version_id,
             year: values.year,
@@ -13,11 +20,14 @@ export default function mapValues(values) {
             mileage: values.mileage,
         },
         customer: {
+            id: values.customer_id,
             name: values.name,
-            middle_name: values.middle_name,
-            first_last_name: values.first_last_name,
-            second_last_name: values.second_last_name,
+            cellPhone: values.cellPhone,
+            middle_name: values.is_company ? null : values.middle_name,
+            first_last_name: values.is_company ? null : values.first_last_name,
+            second_last_name: values.is_company ? null : values.second_last_name,
             email: values.email,
+            date_incorporation_company: values.date_incorporation_company,
             rfc: values.rfc,
             is_company: values.is_company,
             customer_address: [
@@ -33,3 +43,35 @@ export default function mapValues(values) {
         },
     };
 }
+
+export const formaFormValues = (values) => ({
+    ...values,
+    policy_type_id: Number(values.policy_type_id),
+    bank_id: Number(values.bank_id),
+    warranty_id: Number(values.warranty_id),
+    date_issue: dayjs(values.date_issue),
+    beginning_effective_date: dayjs(values.beginning_effective_date),
+    end_effective_date: dayjs(values.end_effective_date),
+    created_at: dayjs(values.created_at),
+    updated_at: dayjs(values.updated_at),
+    email: values.policy_detail.customer.email,
+    name: values.policy_detail.customer.name,
+    middle_name: values.policy_detail.customer.middle_name,
+    first_last_name: values.policy_detail.customer.first_last_name,
+    second_last_name: values.policy_detail.customer.second_last_name,
+    rfc: values.policy_detail.customer.rfc,
+    date_incorporation_company: dayjs(values.policy_detail.customer.date_incorporation_company),
+    is_company: Boolean(values.policy_detail.customer.is_company),
+    cellPhone: values.policy_detail.customer.cellPhone,
+    street: values.policy_detail.customer.customer_addresses[0].street,
+    external_number: values.policy_detail.customer.customer_addresses[0].external_number,
+    inner_number: values.policy_detail.customer.customer_addresses[0].inner_number,
+    district: values.policy_detail.customer.customer_addresses[0].district,
+    zip_code: values.policy_detail.customer.customer_addresses[0].zip_code,
+    city_id: Number(values.policy_detail.customer.customer_addresses[0].city_id),
+    category_id: Number(values.policy_detail.car.category_id),
+    version_id: Number(values.policy_detail.car.version_id),
+    year: dayjs(values.policy_detail.car.year),
+    vin: values.policy_detail.car.vin,
+    mileage: values.policy_detail.car.mileage,
+});

@@ -54,7 +54,7 @@ const errorHandler = (response) => {
 const fetcher = {
     get: (url, props) => request
         .get(url, {
-            params: props,
+            params: { ...props, agency_id: getUserData()?.agency_id },
         })
         .then((response) => response.data)
         .catch(errorHandler),
