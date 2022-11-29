@@ -57,7 +57,7 @@ export const createPolicy = (props) => async (dispatch) => {
         }
         dispatch(savePolicy({ ...data, car: data.car, customer: data.customer }));
         dispatch(setLoading(false));
-        return { error, message };
+        return { error, message, id: data?.id };
     } catch (error) {
         dispatch(setLoading(false));
         return error;

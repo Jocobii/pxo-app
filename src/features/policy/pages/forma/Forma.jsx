@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import dayjs from 'dayjs';
 import {
     Form, Input,
-    Divider, Row,
+    Divider, Row, Button,
     Select, DatePicker,
     Switch, message, InputNumber,
 } from 'antd';
@@ -25,6 +25,7 @@ import {
 import { IS_FINANCED } from '../utils/constans';
 import fetcher from '../../../../utils/_request';
 // import { validatePolicyNumber, validateCarVIN } from '../utils/formaValidations';
+import printPDF from '../../../../utils/pdf';
 
 const Forma = () => {
     const { id } = useParams();
@@ -33,6 +34,7 @@ const Forma = () => {
     const categories = useSelector(selectCarCategories);
     const versions = useSelector(selectCarVersions);
     const products = useSelector(selectCarProducts);
+    const navigate = useNavigate();
     const policyTypes = useSelector(selectPolicyTypes);
     const banks = useSelector(selectBanks);
     const { agencies, cities } = useSelector(selectCatalogs);
@@ -55,6 +57,8 @@ const Forma = () => {
     useEffect(() => {
         getAllPolicies();
     }, [getAllPolicies]);
+
+    const printPolicy = () => printPDF('/policies/pdf/contract', policyData?.id);
 
     useEffect(() => {
         if (policyData?.id) {
@@ -79,9 +83,8 @@ const Forma = () => {
             customer_id: policyData?.policy_detail.customer.id,
             car_id: policyData?.policy_detail.car.id,
         });
-        console.log(values.is_company);
-        console.log(values);
-        const { error, message: msg } = policyData?.id
+
+        const { error, message: msg, id: newId } = policyData?.id
             ? await (dispatch(updatePolicy(data))) : await dispatch(createPolicy(data));
 
         if (error) {
@@ -89,6 +92,7 @@ const Forma = () => {
             return;
         }
         message.success(msg);
+        if (!policyData?.id) navigate(`/policy/${newId}`);
     };
 
     const getWarranty = debounce(async () => {
@@ -321,19 +325,6 @@ const Forma = () => {
     const personalFields = [
         { divider: <Divider orientation="left">Datos personales</Divider> },
         {
-            label: 'Correo electronico',
-            col: 6,
-            scope: 'email',
-            component: <Input placeholder="Correo electronico" />,
-            opts: {
-                rules: [
-                    { required: true, message: 'El correo electronico es requerido' },
-                    { max: 100, message: 'Max de 100' },
-                    { type: 'email', message: 'No es un correo valido' },
-                ],
-            },
-        },
-        {
             label: !isCompany ? 'Nombre' : 'Razon social',
             col: 6,
             scope: 'name',
@@ -342,18 +333,6 @@ const Forma = () => {
                 rules: [
                     { required: true, message: 'El nombre es requerido' },
                     { max: 100, message: 'Max de 100' },
-                ],
-            },
-        },
-        {
-            display: !isCompany,
-            label: 'Segundo nombre',
-            col: 6,
-            scope: 'middle_name',
-            component: <Input placeholder="Segundo nombre" />,
-            opts: {
-                rules: [
-                    { max: 30, message: 'Max de 30' },
                 ],
             },
         },
@@ -391,6 +370,19 @@ const Forma = () => {
                 rules: [
                     { required: true, message: 'El RFC es requerido' },
                     { max: 30, message: 'Max de 30' },
+                ],
+            },
+        },
+        {
+            label: 'Correo electronico',
+            col: 6,
+            scope: 'email',
+            component: <Input placeholder="Correo electronico" />,
+            opts: {
+                rules: [
+                    { required: true, message: 'El correo electronico es requerido' },
+                    { max: 100, message: 'Max de 100' },
+                    { type: 'email', message: 'No es un correo valido' },
                 ],
             },
         },
@@ -509,6 +501,9 @@ const Forma = () => {
 
     return (
         <>
+            <Row style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+                <Button onClick={() => printPolicy()} type="primary" danger>Imprimir Poliza</Button>
+            </Row>
             <Form
                 form={form}
                 layout="vertical"

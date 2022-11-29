@@ -75,6 +75,22 @@ const fetcher = {
         })
         .then((response) => response.data)
         .catch(errorHandler),
+    getPDF: (url, props) => request
+        .get(url, {
+            params: { ...props, agency_id: getUserData()?.agency_id },
+        })
+        .then((response) => {
+            const arrayBuffer = response.data.data.data;
+            const arr = new Uint8Array(arrayBuffer);
+            const blob = new Blob([arr], { type: 'application/pdf' });
+            const pdfUrl = window.URL.createObjectURL(blob);
+            return {
+                pdfUrl,
+                error: response.data.data.error,
+                message: response.data.data.message,
+            };
+        })
+        .catch(errorHandler),
 };
 
 export default fetcher;
