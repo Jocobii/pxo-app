@@ -19,7 +19,7 @@ const userData = getData();
 
 const initialState = {
     loading: false,
-    data: userData,
+    data: { ...userData },
     loggedIn: !!userData.id,
     pagination: {},
     list: [],
@@ -123,7 +123,7 @@ export const selectUserById = createSelector(
 export const login = (values) => async (dispatch) => {
     dispatch(usersLoading());
     const { error, message, data } = await signIn(values);
-    if (error) {
+    if (error || !data) {
         dispatch(usersError(error));
         return { error, message };
     }

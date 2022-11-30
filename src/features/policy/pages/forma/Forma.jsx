@@ -20,7 +20,7 @@ import {
     selectCarCategories,
     selCarVersions, selectCarVersions,
     selectCatalogs, selCarProducts, selectCarProducts,
-    getCategories, selectPolicyTypes, selectBanks,
+    selectPolicyTypes, selectBanks, selectIsInitCatalogLoaded,
 } from '../../../catalogs/catalogSlice';
 import { IS_FINANCED } from '../utils/constans';
 import fetcher from '../../../../utils/_request';
@@ -31,9 +31,11 @@ const Forma = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const policyData = useSelector(selectPolicyData);
+    const userAgency = useSelector((state) => state.user.data.agency_id);
     const categories = useSelector(selectCarCategories);
     const versions = useSelector(selectCarVersions);
     const products = useSelector(selectCarProducts);
+    const isInitCatalogLoaded = useSelector(selectIsInitCatalogLoaded);
     const navigate = useNavigate();
     const policyTypes = useSelector(selectPolicyTypes);
     const banks = useSelector(selectBanks);
@@ -42,17 +44,9 @@ const Forma = () => {
     const [isFinanced, setIsFinanced] = useState(true);
     const [form] = Form.useForm();
 
-    const getInitCatalog = useCallback(async () => {
-        dispatch(getCategories());
-    }, [dispatch]);
-
     const getAllPolicies = useCallback(() => {
         dispatch(getPolicies({ id }));
     }, [dispatch, id]);
-
-    useEffect(() => {
-        getInitCatalog();
-    }, [getInitCatalog]);
 
     useEffect(() => {
         getAllPolicies();
@@ -61,7 +55,7 @@ const Forma = () => {
     const printPolicy = () => printPDF('/policies/pdf/contract', policyData?.id);
 
     useEffect(() => {
-        if (policyData?.id) {
+        if (policyData?.id && isInitCatalogLoaded) {
             setIsCompany(Boolean(policyData?.policy_detail?.customer.is_company));
             setIsFinanced(policyData?.policy_type_id === IS_FINANCED);
             form.setFieldsValue(formaFormValues(policyData));
@@ -72,13 +66,21 @@ const Forma = () => {
                     );
                 dispatch(selCarVersions(currentCategory.versions));
             }
+            fetcher.get('/products', {
+                dateIssue: policyData.dateIssue,
+                mileage: policyData.policy_detail.car.mileage,
+                categoryId: policyData.policy_detail.car.category_id,
+            }).then(({ data }) => {
+                dispatch(selCarProducts(data));
+            });
         }
-    }, [policyData, form, categories, dispatch]);
+    }, [policyData, form, categories, dispatch, isInitCatalogLoaded]);
 
     const onFinish = async () => {
         const values = await form.validateFields();
         const data = mapValues({
             ...values,
+            agency_id: userAgency,
             id: policyData?.id,
             customer_id: policyData?.policy_detail.customer.id,
             car_id: policyData?.policy_detail.car.id,
@@ -93,6 +95,19 @@ const Forma = () => {
         }
         message.success(msg);
         if (!policyData?.id) navigate(`/policy/${newId}`);
+    };
+
+    const getYearWhichWarrantyApply = () => {
+        const { date_issue, warranty_id } = form.getFieldsValue(['date_issue', 'warranty_id']);
+        const startOfWarranty = dayjs(date_issue).add(3, 'year').format('YYYY/MM/DD');
+
+        const currentWarrantySelected = products.find((item) => item.id === warranty_id);
+        const endOfWarranty = dayjs(startOfWarranty).add(currentWarrantySelected.months, 'months').format('YYYY/MM/DD');
+
+        form.setFieldsValue({
+            beginning_effective_date: dayjs(startOfWarranty),
+            end_effective_date: dayjs(endOfWarranty),
+        });
     };
 
     const getWarranty = debounce(async () => {
@@ -114,7 +129,7 @@ const Forma = () => {
             scope: 'number_extension',
             component: (
                 <Input
-                    // disabled
+                    disabled
                     placeholder="No. poliza"
                 />
             ),
@@ -131,14 +146,13 @@ const Forma = () => {
             scope: 'beginning_effective_date',
             component: (
                 <DatePicker
+                    disabled
                     style={{ width: '100%' }}
                     placeholder="Inicio de Vigencia"
                     disabledDate={(e) => disableStartDate(e, form.getFieldValue('end_effective_date'))}
                 />
             ),
-            opts: {
-                rules: [{ required: true, message: 'La fecha de vigencia es requerida' }],
-            },
+            opts: {},
         },
         {
             label: 'Fin de Vigencia',
@@ -146,14 +160,13 @@ const Forma = () => {
             scope: 'end_effective_date',
             component: (
                 <DatePicker
+                    disabled
                     style={{ width: '100%' }}
                     placeholder="Fin de Vigencia"
                     disabledDate={(e) => disableEndDate(e, form.getFieldValue('beginning_effective_date'))}
                 />
             ),
-            opts: {
-                rules: [{ required: true, message: 'La fecha de vigencia es requerida' }],
-            },
+            opts: {},
         },
         {
             label: 'Agencia',
@@ -161,18 +174,23 @@ const Forma = () => {
             scope: 'agency_id',
             component: (
                 <Select
+                    disabled
                     placeholder="Agencia"
+                    defaultValue={userAgency}
                 >
                     {
                         agencies.map((e) => (
-                            <Select.Option key={e.id} value={e.id}>{e.name}</Select.Option>
+                            <Select.Option
+                                key={e.id}
+                                value={e.id}
+                            >
+                                {e.name}
+                            </Select.Option>
                         ))
                     }
                 </Select>
             ),
-            opts: {
-                rules: [{ required: true, message: 'La agencia es requerida' }],
-            },
+            opts: {},
         },
         {
             label: 'Tipo de compra',
@@ -208,7 +226,7 @@ const Forma = () => {
                 >
                     {
                         banks.map((e) => (
-                            <Select.Option key={e.id} value={e.id}>{e.brand}</Select.Option>
+                            <Select.Option key={e.id} value={e.id}>{e.name}</Select.Option>
                         ))
                     }
                 </Select>
@@ -309,10 +327,16 @@ const Forma = () => {
             component: (
                 <Select
                     placeholder="Grupo"
+                    onSelect={() => getYearWhichWarrantyApply()}
                 >
                     {
                         products.map((item) => (
-                            <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            <Select.Option
+                                key={item.id}
+                                value={item.id}
+                            >
+                                {`${item.name} - ${item.months} meses - ${item.price} MXN`}
+                            </Select.Option>
                         ))
                     }
                 </Select>
@@ -502,7 +526,7 @@ const Forma = () => {
     return (
         <>
             <Row style={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                <Button onClick={() => printPolicy()} type="primary" danger>Imprimir Poliza</Button>
+                <Button disabled={!policyData?.id} onClick={() => printPolicy()} type="primary" danger>Imprimir Poliza</Button>
             </Row>
             <Form
                 form={form}

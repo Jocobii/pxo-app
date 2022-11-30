@@ -5,4 +5,7 @@ export const getCarCategories = (categoryId) => fetcher
     .then((data) => data)
     .catch((error) => error);
 
-export const s = '';
+export const getInitCatalogs = () => fetcher
+    .get('/catalogs/init-catalogs')
+    .then((data) => data)
+    .catch((error) => error);
