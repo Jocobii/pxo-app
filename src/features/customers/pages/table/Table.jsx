@@ -3,67 +3,33 @@ import { Tabs, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import GenericTable from '../../../../components/GenericTable/GenericTable';
-import { selectCustomerList } from '../../customerSlice';
+import { selectCustomerList, getCustomer } from '../../customerSlice';
 import customerModule from '../../router';
-
-const personasFisicas = [
-    {
-        id: '1',
-        type: 'Fisica',
-        fullName: 'Alexander Vazquez Jocobi',
-        cellPhone: '331 123 4567',
-    },
-    {
-        id: '2',
-        type: 'Fisica',
-        fullName: 'Jose Perez Hernandez',
-        cellPhone: '331 123 4567',
-    },
-    {
-        id: '3',
-        type: 'Fisica',
-        fullName: 'Axxel Romero Perez',
-        cellPhone: '331 123 4567',
-    },
-];
-
-const personasMorales = [
-    {
-        id: '1',
-        type: 'Moral',
-        fullName: 'Manuel Lopez Flores',
-        cellPhone: '331 123 5321',
-    },
-    {
-        id: '2',
-        type: 'Moral',
-        fullName: 'Angela Rodriguez Bravo',
-        cellPhone: '331 123 7548',
-    },
-    {
-        id: '3',
-        type: 'Moral',
-        fullName: 'Daniela Herrera Moreno',
-        cellPhone: '331 123 1256',
-    },
-];
 
 const columns = [
     {
-        title: 'Tipo',
-        dataIndex: 'type',
-        key: 'type',
-        render: (text) => <p>{text}</p>,
-    },
-    {
-        title: 'Nombre completo',
+        title: 'Nombre',
         dataIndex: 'fullName',
         key: 'fullName',
+        link: {
+            bold: true,
+            to: (id) => customerModule.forma(id),
+        },
+    },
+    {
+        title: 'Correo electrónico',
+        dataIndex: 'email',
+        key: 'email',
     },
     {
         title: 'Teléfono',
         dataIndex: 'cellPhone',
         key: 'cellPhone',
+    },
+    {
+        title: 'RFC',
+        dataIndex: 'rfc',
+        key: 'rfc',
     },
 ];
 
@@ -84,17 +50,11 @@ const Table = () => {
     ];
 
     useEffect(() => {
-        if (data.length === 0) {
-            dispatch({ type: 'customer/setData', payload: personasFisicas });
-        }
-    }, [data, dispatch]);
+        dispatch(getCustomer({ simple: true, is_company: false }));
+    }, [dispatch]);
 
     const handleChangeTab = (key) => {
-        if (key === 'item-2') {
-            dispatch({ type: 'customer/setData', payload: personasMorales });
-            return;
-        }
-        dispatch({ type: 'customer/setData', payload: personasFisicas });
+        dispatch(getCustomer({ simple: true, is_company: key === 'item-2' }));
     };
 
     const items = [
