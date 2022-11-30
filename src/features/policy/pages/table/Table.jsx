@@ -36,7 +36,7 @@ const Table = () => {
             title: 'Telefono',
             dataIndex: 'cellPhone',
             key: 'cellPhone',
-            render: (_, record) => `${record.policy_detail.customer.cellPhone}`,
+            render: (_, record) => `${record.policy_detail.customer.cellPhone || ''}`,
         },
         {
             title: 'Correo electronico',

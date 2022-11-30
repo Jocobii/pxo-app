@@ -97,15 +97,6 @@ export const Login = () => {
                             Log in
                         </Button>
                     </Form.Item>
-                    <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                        >
-                            Recuperar contraseña
-                        </Button>
-                    </Form.Item>
                 </Form>
             </Col>
         </Row>

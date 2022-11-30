@@ -1,10 +1,12 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { privateRoutes } from '../../routes/routes';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/PXLogo.png';
 
 const { Sider } = Layout;
 const SiderMenu = ({ collapsed }) => {
@@ -12,7 +14,7 @@ const SiderMenu = ({ collapsed }) => {
     return (
         <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="divLogo">
-                <img className="logo" src={logo} alt="logo-img" />
+                <img onClick={() => navigate('/')} className="logo" src={logo} alt="logo-img" />
             </div>
             <Menu
                 theme="dark"
