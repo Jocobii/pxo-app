@@ -68,7 +68,6 @@ export const updatePolicy = (props) => async (dispatch) => {
     dispatch(setLoading(true));
     try {
         const { error, message, data } = await policiesServices.updatePolicy(props);
-        console.log('data updated', data);
         if (error) {
             dispatch(setError(true));
             return { error, message };

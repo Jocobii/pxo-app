@@ -3,7 +3,7 @@ import { Tabs, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import GenericTable from '../../../../components/GenericTable/GenericTable';
-import { selectCustomerList, getCustomer } from '../../customerSlice';
+import { selectCustomerList, getCustomers, setIsEmpresa } from '../../customerSlice';
 import customerModule from '../../router';
 
 const columns = [
@@ -50,11 +50,12 @@ const Table = () => {
     ];
 
     useEffect(() => {
-        dispatch(getCustomer({ simple: true, is_company: false }));
+        dispatch(getCustomers({ simple: true, is_company: false }));
     }, [dispatch]);
 
     const handleChangeTab = (key) => {
-        dispatch(getCustomer({ simple: true, is_company: key === 'item-2' }));
+        dispatch(setIsEmpresa());
+        dispatch(getCustomers({ simple: true, is_company: key === 'item-2' }));
     };
 
     const items = [
@@ -64,7 +65,7 @@ const Table = () => {
 
     return (
         <Tabs
-            tabBarExtraContent={<Button type="primary">Agregar</Button>}
+            tabBarExtraContent={<Button onClick={() => navigate(customerModule.forma('add'))} type="primary">Agregar</Button>}
             onChange={handleChangeTab}
             items={items}
         />

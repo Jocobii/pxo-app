@@ -26,6 +26,7 @@ import { IS_FINANCED } from '../utils/constans';
 import fetcher from '../../../../utils/_request';
 // import { validatePolicyNumber, validateCarVIN } from '../utils/formaValidations';
 import printPDF from '../../../../utils/pdf';
+import validateIfExistsByField from '../../../../utils/validateField';
 
 const Forma = () => {
     const { id } = useParams();
@@ -53,6 +54,22 @@ const Forma = () => {
     }, [getAllPolicies]);
 
     const printPolicy = () => printPDF('/policies/pdf/contract', policyData?.id);
+
+    const validateField = debounce((item, value) => {
+        if (!value) return;
+
+        validateIfExistsByField('car', item.field, value, policyData?.policy_detail.car.id)
+            .then(({ error, message: msg }) => {
+                if (error) {
+                    form.setFields([
+                        {
+                            name: item.field,
+                            errors: [msg],
+                        },
+                    ]);
+                }
+            });
+    }, [500]);
 
     useEffect(() => {
         if (policyData?.id && isInitCatalogLoaded) {
@@ -303,11 +320,14 @@ const Forma = () => {
             label: 'VIN',
             col: 6,
             scope: 'vin',
-            component: (<Input placeholder="Serie" />),
+            component: (
+                <Input
+                    onChange={(e) => validateField({ field: 'vin' }, e.target.value)}
+                    placeholder="Serie"
+                />),
             opts: {
                 rules: [
                     { required: true, message: 'El VIN es requerido' },
-                    // { validator: validateCarVIN },
                 ],
             },
         },

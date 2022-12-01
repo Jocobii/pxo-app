@@ -1,8 +1,11 @@
 import fetcher from '../../../utils/_request';
 
-const getCustomerList = (props) => fetcher
+export const getCustomer = (props) => fetcher
     .get('/customers', props)
     .then((data) => data)
     .catch((error) => error);
 
-export default getCustomerList;
+export const createCustomer = (props) => fetcher
+    .post('/customers/', props)
+    .then((data) => data)
+    .catch((error) => error);
