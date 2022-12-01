@@ -1,36 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-    Form, Input,
-    Divider, Row,
+    Form,
+    Input,
+    Divider,
+    Row,
     Select,
+    DatePicker,
+    message,
 } from 'antd';
-import FormFields from '../../../../components/Form';
+import dayjs from 'dayjs';
+import debounce from 'lodash.debounce';
+import { useDispatch, useSelector } from 'react-redux';
 import FooterControl from '../../../../components/FooterControl/FooterControl';
-
-const initData = {
-    name: 'Alexander',
-    first_last_name: 'Vazquez',
-    second_last_name: 'Jocobi',
-    email: 'adalbertojocobi@gmail.com',
-    rfc: 'VAJA980101',
-    cellphone: '3311234567',
-    type: 1,
-    street: 'Calle 1',
-    colonia: 'Colonia 1',
-    exterior_number: '7403',
-    interior_number: '1',
-    postal_code: '12345',
-    city: 'Guadalajara',
-    state: 'Jalisco',
-    country: 1,
-};
+import { getOneCustomer, saveCustomer } from '../../customerSlice';
+import FormFields from '../../../../components/Form';
+import { formaFormValues, formatSaveValues } from '../adapters/mapValues';
+import { selectCatalogs } from '../../../catalogs/catalogSlice';
+import validateIfExistsByField from '../../../../utils/validateField';
 
 const Forma = () => {
     const { id } = useParams();
-    console.log('id', id);
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
-    form.setFieldsValue(initData);
+    const data = useSelector((state) => state.customer.data);
+    const { cities } = useSelector(selectCatalogs);
+    const itIsCompany = useSelector((state) => state.customer.isCompany);
+    const [isCompany, setIsCompany] = useState(itIsCompany);
+    useEffect(() => {
+        if (Number(id)) {
+            dispatch(getOneCustomer({ id }));
+        }
+    }, [dispatch, form, id]);
+
+    useEffect(() => {
+        if (Number(data?.id)) {
+            form.setFieldsValue(formaFormValues(data));
+            setIsCompany(Boolean(data.is_company));
+        }
+    }, [data, dispatch, form, id]);
+
+    const onFinish = async () => {
+        const values = await form.validateFields();
+        const {
+            error,
+            message: msg,
+        } = await dispatch(saveCustomer(formatSaveValues({
+            ...data,
+            ...values,
+            is_company: isCompany,
+        })));
+        if (error) {
+            message.error(msg);
+            return;
+        }
+        message.success(msg);
+    };
+
+    const validateField = (item, value) => {
+        if (!value) return;
+        validateIfExistsByField('customer', item.field, value, data?.id).then(
+            ({ error, message: msg }) => {
+                if (error) {
+                    form.setFields([
+                        {
+                            name: item.field,
+                            errors: [msg],
+                        },
+                    ]);
+                }
+            },
+        );
+    };
+
     const personalFields = [
         { divider: <Divider orientation="left">Datos personales</Divider> },
         {
@@ -38,16 +80,34 @@ const Forma = () => {
             col: 6,
             scope: 'name',
             component: <Input placeholder="Nombre" />,
-            opts: {},
+            opts: {
+                rules: [{ required: true, message: 'Este campo es requerido' }],
+            },
         },
         {
+            display: !isCompany,
+            label: 'Segundo nombre',
+            col: 6,
+            scope: 'middle_name',
+            component: <Input placeholder="Segundo Nombre" />,
+        },
+        {
+            display: !isCompany,
             label: 'Apellido paterno',
             col: 6,
             scope: 'first_last_name',
             component: <Input placeholder="Apellido paterno" />,
-            opts: {},
+            opts: {
+                rules: [
+                    {
+                        required: !isCompany,
+                        message: 'Este campo es requerido',
+                    },
+                ],
+            },
         },
         {
+            display: !isCompany,
             label: 'Apellido materno',
             col: 6,
             scope: 'second_last_name',
@@ -58,36 +118,63 @@ const Forma = () => {
             label: 'Correo electrónico',
             col: 6,
             scope: 'email',
-            component: <Input placeholder="Correo electrónico" />,
-            opts: {},
+            component: (
+                <Input
+                    onChange={debounce((e) => {
+                        validateField({ field: 'email' }, e.target.value);
+                    }, [500])}
+                    placeholder="Correo electrónico"
+                />
+            ),
+            opts: {
+                rules: [{ required: true, message: 'Este campo es requerido' }],
+            },
         },
         {
             label: 'RFC',
             col: 6,
             scope: 'rfc',
-            component: <Input placeholder="RFC" />,
-            opts: {},
+            component: (
+                <Input
+                    onChange={debounce((e) => {
+                        validateField({ field: 'rfc' }, e.target.value);
+                    }, [500])}
+                    placeholder="RFC"
+                />
+            ),
+            opts: {
+                rules: [
+                    { required: true, message: 'Este campo es requerido' },
+                ],
+            },
         },
         {
             label: 'Telefono',
             col: 6,
-            scope: 'cellphone',
+            scope: 'cellPhone',
             component: <Input placeholder="Telefono" />,
             opts: {},
         },
         {
-            label: 'Tipo de cliente',
+            display: isCompany,
+            label: 'Fecha de constitucion de la empresa',
             col: 6,
-            scope: 'type',
+            scope: 'date_incorporation_company',
             component: (
-                <Select
-                    placeholder="Tipo de cliente"
-                >
-                    <Select.Option value={1}>Persona física</Select.Option>
-                    <Select.Option value={2}>Persona moral</Select.Option>
-                </Select>
+                <DatePicker
+                    defaultPickerValue={dayjs()}
+                    style={{ width: '100%' }}
+                    picker="La Fecha de constitucion"
+                />
             ),
-            opts: {},
+            opts: {
+                rules: [
+                    {
+                        required: true,
+                        message: 'La Fecha de constitucion es requerida',
+                    },
+                ],
+            },
         },
     ];
     const addressFields = [
@@ -97,77 +184,94 @@ const Forma = () => {
             col: 6,
             scope: 'street',
             component: <Input placeholder="Calle" />,
-            opts: {},
+            opts: {
+                rules: [
+                    {
+                        required: true,
+                        message: 'La Fecha de constitucion es requerida',
+                    },
+                ],
+            },
         },
         {
             label: 'Colonia',
             col: 6,
-            scope: 'colonia',
+            scope: 'district',
             component: <Input placeholder="Colonia" />,
-            opts: {},
+            opts: {
+                rules: [
+                    {
+                        required: true,
+                        message: 'La Fecha de constitucion es requerida',
+                    },
+                ],
+            },
         },
         {
             label: 'Numero exterior',
             col: 6,
-            scope: 'exterior_number',
+            scope: 'external_number',
             component: <Input placeholder="Numero exterior" />,
-            opts: {},
+            opts: {
+                rules: [
+                    {
+                        required: true,
+                        message: 'La Fecha de constitucion es requerida',
+                    },
+                ],
+            },
         },
         {
             label: 'Numero interior',
             col: 6,
-            scope: 'interior_number',
+            scope: 'inner_number',
             component: <Input placeholder="Numero interior" />,
             opts: {},
         },
         {
             label: 'Código postal',
             col: 6,
-            scope: 'postal_code',
+            scope: 'zip_code',
             component: <Input placeholder="Código postal" />,
-            opts: {},
+            opts: {
+                rules: [
+                    {
+                        required: true,
+                        message: 'La Fecha de constitucion es requerida',
+                    },
+                ],
+            },
         },
         {
             label: 'Ciudad',
             col: 6,
-            scope: 'city',
-            component: <Input placeholder="Ciudad" />,
-            opts: {},
-        },
-        {
-            label: 'Estado',
-            col: 6,
-            scope: 'state',
-            component: <Input placeholder="Estado" />,
-            opts: {},
-        },
-        {
-            label: 'País',
-            col: 6,
-            scope: 'country',
+            scope: 'city_id',
             component: (
-                <Select
-                    placeholder="País"
-                >
-                    <Select.Option key={1} value={1}>Mexico</Select.Option>
-                    <Select.Option key={2} value={2}>USA</Select.Option>
-                    <Select.Option key={3} value={3}>Canada</Select.Option>
+                <Select placeholder="Ciudad">
+                    {cities.map((item) => (
+                        <Select.Option key={item.id} value={item.id}>
+                            {item.name}
+                        </Select.Option>
+                    ))}
                 </Select>
             ),
-            opts: {},
+            opts: {
+                rules: [
+                    { required: true, message: 'La ciudad es obligatoria' },
+                ],
+            },
         },
     ];
     return (
         <>
-            <Form
-                form={form}
-                layout="vertical"
-            >
+            <Form form={form} layout="vertical">
                 <Row gutter={24}>
-                    <FormFields fields={[...personalFields, ...addressFields]} />
+                    <FormFields
+                        fields={[...personalFields, ...addressFields]}
+                    />
                 </Row>
             </Form>
-            <FooterControl form={form} />
+            <FooterControl onFinish={onFinish} form={form} />
         </>
     );
 };

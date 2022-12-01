@@ -1,11 +1,16 @@
 import fetcher from './_request';
 
-export const validateIfExistsByField = async (modelName, fieldLike, searchLike) => {
+export const validateIfExistsByField = async (modelName, fieldLike, searchLike, id) => {
     if (!modelName || !fieldLike || !searchLike) {
         return false;
     }
-    const { data } = await fetcher.get('/validateByField', { modelName, fieldLike, searchLike });
-    return data.exists;
+    const { error, message, data } = await fetcher.get('/validateByField', {
+        modelName,
+        fieldLike,
+        searchLike,
+        id,
+    });
+    return { error, message, data };
 };
 
 export default validateIfExistsByField;

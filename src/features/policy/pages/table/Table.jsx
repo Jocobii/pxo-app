@@ -1,16 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Tag } from 'antd';
 import GenericTable from '../../../../components/GenericTable/GenericTable';
 import HeaderButtons from './components/HeaderButtons';
 import { getPolicies, selectPolicyList } from '../../policySlice';
-
-const getColor = (text) => {
-    let color = text === 'Rechazada' ? 'red' : 'green';
-    if (text === 'Pendiente') color = 'blue';
-    return <Tag color={color}>{text}</Tag>;
-};
 
 const Table = () => {
     const dispatch = useDispatch();
@@ -30,7 +23,7 @@ const Table = () => {
             title: 'Nombre completo',
             dataIndex: 'fullName',
             key: 'fullName',
-            render: (_, record) => `${record.policy_detail.customer.fullName}`,
+            render: (_, record) => `${record.policy_detail.customer.fullName || ''}`,
         },
         {
             title: 'Telefono',
@@ -42,13 +35,13 @@ const Table = () => {
             title: 'Correo electronico',
             dataIndex: 'email',
             key: 'email',
-            render: (_, record) => `${record.policy_detail.customer.email}`,
+            render: (_, record) => `${record.policy_detail.customer.email || ''}`,
         },
         {
             title: 'Automovil',
             dataIndex: 'model',
             key: 'model',
-            render: (_, record) => `${record.policy_detail.car.category.name} - ${record.policy_detail.car.version.name}`,
+            render: (_, record) => `${record.policy_detail.car.category.name || ''} - ${record.policy_detail.car.version.name || ''}`,
         },
         {
             title: 'Kilometraje',
@@ -60,19 +53,13 @@ const Table = () => {
             title: 'VIN',
             dataIndex: 'vin',
             key: 'vin',
-            render: (_, record) => `${record.policy_detail.car.vin}`,
-        },
-        {
-            title: 'Estatus',
-            dataIndex: 'status',
-            key: 'status',
-            render: getColor,
+            render: (_, record) => `${record.policy_detail.car.vin || ''}`,
         },
         {
             title: 'Fecha de la poliza',
             dataIndex: 'date',
             key: 'date',
-            render: (_, record) => `${record.date_issue}`,
+            render: (_, record) => `${record.date_issue || ''}`,
         },
     ];
 
