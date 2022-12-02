@@ -24,7 +24,6 @@ import {
 } from '../../../catalogs/catalogSlice';
 import { IS_FINANCED } from '../utils/constans';
 import fetcher from '../../../../utils/_request';
-// import { validatePolicyNumber, validateCarVIN } from '../utils/formaValidations';
 import printPDF from '../../../../utils/pdf';
 import validateIfExistsByField from '../../../../utils/validateField';
 
@@ -152,7 +151,6 @@ const Forma = () => {
             ),
             opts: {
                 rules: [
-                    // { required: true, message: 'El numero de poliza es requerido' },
                     { max: 50, message: 'Max de 50' },
                 ],
             },
@@ -376,6 +374,18 @@ const Forma = () => {
             opts: {
                 rules: [
                     { required: true, message: 'El nombre es requerido' },
+                    { max: 100, message: 'Max de 100' },
+                ],
+            },
+        },
+        {
+            display: !isCompany,
+            label: 'Segundo nombre',
+            col: 6,
+            scope: 'middle_name',
+            component: <Input placeholder="Segundo nombre" />,
+            opts: {
+                rules: [
                     { max: 100, message: 'Max de 100' },
                 ],
             },

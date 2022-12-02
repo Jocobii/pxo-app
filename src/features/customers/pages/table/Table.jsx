@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { Tabs, Button } from 'antd';
+import { Tabs, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import GenericTable from '../../../../components/GenericTable/GenericTable';
-import { selectCustomerList, getCustomers, setIsEmpresa } from '../../customerSlice';
+import {
+    selectCustomerList, getCustomers, setIsEmpresa,
+    deleteCustomer,
+} from '../../customerSlice';
 import customerModule from '../../router';
 
 const columns = [
@@ -37,6 +40,15 @@ const Table = () => {
     const dispatch = useDispatch();
     const data = useSelector(selectCustomerList);
     const navigate = useNavigate();
+
+    const handleDelete = async (id) => {
+        const { error, message: msg } = await dispatch(deleteCustomer(id));
+        if (error) {
+            message.error(msg);
+            return;
+        }
+        message.success(msg);
+    };
     const controls = [
         {
             fixed: 'right',
@@ -45,7 +57,7 @@ const Table = () => {
         },
         {
             type: 'delete',
-            handle: (id) => dispatch({ type: 'customer/customerDelete', payload: id }),
+            handle: (id) => handleDelete(id),
         },
     ];
 
