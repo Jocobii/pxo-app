@@ -55,17 +55,28 @@ export const selectCustomerList = (state) => state.customer.list;
 
 export const saveCustomer = (props) => async (dispatch) => {
     try {
-        console.log(props);
         const { error, message, data } = props.id ? await fetcher.put('/customers/', props) : await fetcher.post('/customers/', props);
         if (error) {
             dispatch(setError());
             return { error, message };
         }
         dispatch(setData(data));
-        console.log(data?.id);
         return { newId: data?.id, error, message };
     } catch (error) {
-        console.log(error);
+        return dispatch(setError());
+    }
+};
+
+export const deleteCustomer = (id) => async (dispatch) => {
+    try {
+        const { error, message, data } = await fetcher.put('/customers/', { id });
+        if (error) {
+            dispatch(setError());
+            return { error, message };
+        }
+        dispatch(setData(data));
+        return { newId: data?.id, error, message };
+    } catch (error) {
         return dispatch(setError());
     }
 };
