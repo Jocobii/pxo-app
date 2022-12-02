@@ -69,13 +69,13 @@ export const saveCustomer = (props) => async (dispatch) => {
 
 export const deleteCustomer = (id) => async (dispatch) => {
     try {
-        const { error, message, data } = await fetcher.put('/customers/', { id });
+        const { error, message } = await fetcher.delete('/customers/', { id });
         if (error) {
             dispatch(setError());
             return { error, message };
         }
-        dispatch(setData(data));
-        return { newId: data?.id, error, message };
+        dispatch(customerDelete(id));
+        return { error, message };
     } catch (error) {
         return dispatch(setError());
     }
