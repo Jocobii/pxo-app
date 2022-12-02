@@ -5,7 +5,7 @@ import customer from '../features/customers/customerSlice';
 import policy from '../features/policy/policySlice';
 import quote from '../features/quotes/quoteSlice';
 import catalog from '../features/catalogs/catalogSlice';
-import crud from '../features/generic/genericSlice';
+import crud from '../features/generic/crudSlice';
 
 export default combineReducers({
     catalog,
