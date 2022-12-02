@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
+import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import GenericTable from '../../../../components/GenericTable/GenericTable';
 import HeaderButtons from './components/HeaderButtons';
-import { getPolicies, selectPolicyList } from '../../policySlice';
+import { getPolicies, selectPolicyList, deletePolicy } from '../../policySlice';
 
 const Table = () => {
     const dispatch = useDispatch();
@@ -13,6 +14,15 @@ const Table = () => {
     const getAllPolicies = useCallback(() => {
         dispatch(getPolicies({ simple: true }));
     }, [dispatch]);
+
+    const handleDelete = async (id) => {
+        const { error, message: msg } = await dispatch(deletePolicy(id));
+        if (error) {
+            message.error(msg);
+            return;
+        }
+        message.success(msg);
+    };
 
     useEffect(() => {
         getAllPolicies();
@@ -71,7 +81,7 @@ const Table = () => {
         },
         {
             type: 'delete',
-            handle: (id) => console.log(id),
+            handle: (id) => handleDelete(id),
         },
     ];
 

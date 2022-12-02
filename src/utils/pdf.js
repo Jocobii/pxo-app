@@ -9,7 +9,7 @@ export const printPDF = async (url, id) => {
     }
     window.open(pdfUrl);
     message.success('Se ha generado el contrato');
-    URL.revokeObjectURL(pdfUrl);
+    // URL.revokeObjectURL(pdfUrl);
     return null;
 };
 

@@ -27,6 +27,9 @@ export const policySlice = createSlice({
             state.list = action.payload;
             state.data = {};
         },
+        policyDelete: (state, action) => {
+            state.list = state.list.filter((item) => item.id !== action.payload);
+        },
         setError: (state, action) => {
             state.error = action.payload;
             state.loading = false;
@@ -36,7 +39,7 @@ export const policySlice = createSlice({
 
 export const {
     setLoading, savePolicy, savePolicyList,
-    setError,
+    setError, policyDelete,
 } = policySlice.actions;
 
 // Selectors
@@ -58,6 +61,23 @@ export const createPolicy = (props) => async (dispatch) => {
         dispatch(savePolicy({ ...data, car: data.car, customer: data.customer }));
         dispatch(setLoading(false));
         return { error, message, id: data?.id };
+    } catch (error) {
+        dispatch(setLoading(false));
+        return error;
+    }
+};
+
+export const deletePolicy = (id) => async (dispatch) => {
+    dispatch(setLoading(true));
+    try {
+        const { error, message } = await fetcher.delete('/policies/', { id });
+        if (error) {
+            dispatch(setError(true));
+            return { error, message };
+        }
+        dispatch(policyDelete(id));
+        dispatch(setLoading(false));
+        return { error, message };
     } catch (error) {
         dispatch(setLoading(false));
         return error;
