@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeModal, addOrUpdate } from '../../crudSlice';
+import Table from '../../components/table/Table';
 
 const requireRule = [{ required: true, message: 'Este campo es requerido' }];
 
@@ -42,6 +43,7 @@ const CategoriesModal = () => {
         <Modal
             title={`${index ? 'Actualizar' : 'Agregar'} una categoria`}
             open={isVisible}
+            width={1000}
             onCancel={handleClose}
             footer={[
                 <Button key="back" onClick={handleClose}>
@@ -66,6 +68,13 @@ const CategoriesModal = () => {
                     <Input placeholder="Nombre" />
                 </Form.Item>
             </Form>
+            <Table columns={[{
+                title: 'Nombre',
+                dataIndex: 'name',
+                key: 'name',
+                render: (text) => <p>{text}</p>,
+            }]}
+            />
         </Modal>
     );
 };

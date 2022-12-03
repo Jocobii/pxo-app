@@ -8,7 +8,7 @@ import Modal from './Modal';
 function CategoryTable() {
     const dispatch = useDispatch();
 
-    const getCategories = useCallback(async () => dispatch(getCatalogList({ mainModel: 'category' })), [dispatch]);
+    const getCategories = useCallback(async () => dispatch(getCatalogList({ mainModel: 'category', include: 'warranty' })), [dispatch]);
 
     const columns = [
         {
@@ -38,7 +38,12 @@ function CategoryTable() {
     return (
         <>
             <Modal />
-            <Table columns={columns} mainModel="category" modalName="CATEGORIES_MODAL" />
+            <Table
+                columns={columns}
+                mainModel="category"
+                include="warranty"
+                modalName="CATEGORIES_MODAL"
+            />
         </>
     );
 }
