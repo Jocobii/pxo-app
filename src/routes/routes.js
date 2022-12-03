@@ -59,6 +59,30 @@ export const privateRoutes = [
                 path: 'users',
                 icon: IconSwitcher('users'),
             },
+            {
+                label: 'Versiones',
+                key: 'menu-versions',
+                path: '/catalogo/versions',
+                icon: IconSwitcher('folder'),
+            },
+            {
+                label: 'Productos',
+                key: 'menu-products',
+                path: '/catalogo/products',
+                icon: IconSwitcher('security'),
+            },
+            {
+                label: 'Categorias',
+                key: 'menu-categories',
+                path: '/catalogo/categories',
+                icon: IconSwitcher('car'),
+            },
+            {
+                label: 'Bancos',
+                key: 'menu-banks',
+                path: '/catalogo/banks',
+                icon: IconSwitcher('bank'),
+            },
         ],
     },
     {

@@ -11,6 +11,10 @@ import {
     EyeOutlined,
     SaveOutlined,
     CloseOutlined,
+    BankOutlined,
+    CarOutlined,
+    SafetyCertificateOutlined,
+    FolderOpenOutlined,
 } from '@ant-design/icons';
 
 const IconSwitcher = (icon) => {
@@ -37,6 +41,14 @@ const IconSwitcher = (icon) => {
             return <SaveOutlined />;
         case 'close':
             return <CloseOutlined />;
+        case 'bank':
+            return <BankOutlined />;
+        case 'car':
+            return <CarOutlined />;
+        case 'security':
+            return <SafetyCertificateOutlined />;
+        case 'folder':
+            return <FolderOpenOutlined />;
         default:
             console.log('Icono no encontrado:', icon);
             return '☢︎';
