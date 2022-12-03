@@ -12,7 +12,9 @@ import {
     deleteCatalog, getCatalogList,
 } from '../../crudSlice';
 
-const Table = ({ columns, modalName, mainModel }) => {
+const Table = ({
+    columns, modalName, mainModel, include,
+}) => {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.crud.list);
     const pagination = useSelector(selectPagination);
@@ -47,6 +49,7 @@ const Table = ({ columns, modalName, mainModel }) => {
                 results: pag.pageSize,
                 page: pag.current,
                 mainModel,
+                include,
                 sortOrder: sorter.order,
             }),
         );
@@ -56,6 +59,7 @@ const Table = ({ columns, modalName, mainModel }) => {
         dispatch(getCatalogList({
             searchLike: value,
             mainModel,
+            include,
             fieldLike: searchField,
         }));
     }, [500]);
@@ -114,6 +118,11 @@ Table.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     modalName: PropTypes.string.isRequired,
     mainModel: PropTypes.string.isRequired,
+    include: PropTypes.string,
+};
+
+Table.defaultProps = {
+    include: '',
 };
 
 export default Table;

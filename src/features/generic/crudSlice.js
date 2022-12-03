@@ -49,6 +49,7 @@ export const crudSlice = createSlice({
         setCatalogUpdated: (state, action) => {
             state.list = state.list.map((item) => {
                 if (item.id === action.payload.id) {
+                    console.log(action.payload);
                     return action.payload;
                 }
                 return item;
