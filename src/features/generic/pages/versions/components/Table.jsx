@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
-import Table from '../../components/table/Table';
-import { getCatalogList } from '../../crudSlice';
+import Table from '../../../components/table/Table';
+import { getCatalogList } from '../../../crudSlice';
 import VersionsModal from './Modal';
 
-function CategoryTable() {
+function VersionTable() {
     const dispatch = useDispatch();
 
     const getCategories = useCallback(async () => dispatch(getCatalogList({
@@ -57,4 +57,4 @@ function CategoryTable() {
     );
 }
 
-export default CategoryTable;
+export default VersionTable;

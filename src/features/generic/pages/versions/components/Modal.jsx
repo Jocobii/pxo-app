@@ -4,8 +4,8 @@ import {
     Button, message, Select,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeModal, addOrUpdate } from '../../crudSlice';
-import { defaultFilterV4 } from '../../../../utils/antd';
+import { closeModal, addOrUpdate } from '../../../crudSlice';
+import { defaultFilterV4 } from '../../../../../utils/antd';
 
 const requireRule = [{ required: true, message: 'Este campo es requerido' }];
 
