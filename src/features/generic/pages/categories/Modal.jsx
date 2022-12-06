@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeModal, addOrUpdate } from '../../crudSlice';
-import Table from '../../components/table/Table';
+import WarrantyTable from './WarrantyTable';
 
 const requireRule = [{ required: true, message: 'Este campo es requerido' }];
 
@@ -68,13 +68,7 @@ const CategoriesModal = () => {
                     <Input placeholder="Nombre" />
                 </Form.Item>
             </Form>
-            <Table columns={[{
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'name',
-                render: (text) => <p>{text}</p>,
-            }]}
-            />
+            <WarrantyTable />
         </Modal>
     );
 };

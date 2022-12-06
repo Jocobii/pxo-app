@@ -320,7 +320,7 @@ const Forma = () => {
             scope: 'vin',
             component: (
                 <Input
-                    onChange={(e) => validateField({ field: 'vin' }, e.target.value)}
+                    onChange={(e) => validateField({ field: 'vin' }, e.target.value?.trim())}
                     placeholder="Serie"
                 />),
             opts: {

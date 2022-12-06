@@ -66,7 +66,6 @@ export const getInitialCatalogs = () => async (dispatch) => {
         console.log(message);
         return;
     }
-    console.log(data);
     dispatch(setInitCatalogs(data));
 };
 export default catalogSlice.reducer;

@@ -66,12 +66,6 @@ export const privateRoutes = [
                 icon: IconSwitcher('folder'),
             },
             {
-                label: 'Productos',
-                key: 'menu-products',
-                path: '/catalogo/products',
-                icon: IconSwitcher('security'),
-            },
-            {
                 label: 'Categorias',
                 key: 'menu-categories',
                 path: '/catalogo/categories',
