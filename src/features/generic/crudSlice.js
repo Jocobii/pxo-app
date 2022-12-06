@@ -49,8 +49,38 @@ export const crudSlice = createSlice({
         setCatalogUpdated: (state, action) => {
             state.list = state.list.map((item) => {
                 if (item.id === action.payload.id) {
-                    console.log(action.payload);
-                    return action.payload;
+                    return { ...action.payload };
+                }
+                return item;
+            });
+        },
+        updateWarrantyOfProduct: (state, action) => {
+            state.list = state.list.map((item) => {
+                if (item.id === action.payload.categoryId) {
+                    item.warranties = item.warranties.map((warranty) => {
+                        if (warranty.id === action.payload.warrantyId) {
+                            return action.payload.warranty;
+                        }
+                        return warranty;
+                    });
+                }
+                return item;
+            });
+        },
+        setWarrantyOfProduct: (state, action) => {
+            state.list = state.list.map((item) => {
+                if (item.id === action.payload.categoryId) {
+                    if (!item.warranties) item.warranties = [];
+                    item.warranties.unshift(action.payload.warranty);
+                }
+                return item;
+            });
+        },
+        deleteWarrantyOfProduct: (state, action) => {
+            state.list = state.list.map((item) => {
+                if (item.id === action.payload.categoryId) {
+                    item.warranties = item.warranties
+                        .filter((warranty) => warranty.id !== action.payload.warrantyId);
                 }
                 return item;
             });
@@ -61,6 +91,8 @@ export const crudSlice = createSlice({
 export const {
     setToList, deleteFromList, setCatalogUpdated,
     setError, openModal, closeModal, setNewCatalog,
+    updateWarrantyOfProduct, deleteWarrantyOfProduct,
+    setWarrantyOfProduct,
 } = crudSlice.actions;
 
 // Selectors
@@ -100,13 +132,34 @@ export const addOrUpdate = (props) => async (dispatch) => {
         }
         if (props?.id) dispatch(setCatalogUpdated(data));
         else dispatch(setNewCatalog(data));
-        return { error, message };
+        return { error, message, data };
     } catch (error) {
         return dispatch(setError());
     }
 };
 
-// eslint-disable-next-line consistent-return
+export const addOrUpdateWarranties = (props) => async (dispatch) => {
+    try {
+        const {
+            error, message, data,
+        } = await addOrUpdateCatalog(props);
+        if (error) {
+            dispatch(setError());
+            return { error, message };
+        }
+        if (props?.id) {
+            dispatch(updateWarrantyOfProduct({
+                categoryId: props.categoryId,
+                warrantyId: props.id,
+                warranty: data,
+            }));
+        } else dispatch(setWarrantyOfProduct({ categoryId: props.categoryId, warranty: data }));
+        return { error, message, data };
+    } catch (error) {
+        return dispatch(setError());
+    }
+};
+
 export const deleteCatalog = (props) => async (dispatch) => {
     try {
         const {
