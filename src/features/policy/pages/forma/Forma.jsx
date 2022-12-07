@@ -84,6 +84,7 @@ const Forma = () => {
             }
             fetcher.get('/products', {
                 dateIssue: policyData.dateIssue,
+                warranty_id: policyData.warranty_id,
                 mileage: policyData.policy_detail.car.mileage,
                 categoryId: policyData.policy_detail.car.category_id,
             }).then(({ data }) => {
@@ -132,7 +133,13 @@ const Forma = () => {
         } = form.getFieldsValue(['date_issue', 'mileage', 'category_id']);
         if (!invoiceDate || !mileage || !categoryId) return;
         const dateIssue = dayjs(invoiceDate).format('YYYY/MM/DD');
-        const { data } = await fetcher.get('/products', { dateIssue, mileage, categoryId });
+        const { data } = await fetcher.get('/products', {
+            dateIssue,
+            mileage,
+            categoryId,
+            sortField: 'months',
+            sortOrder: 'asc',
+        });
         form.resetFields(['warranty_id']);
         dispatch(selCarProducts(data));
     }, [500]);
