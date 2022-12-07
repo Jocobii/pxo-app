@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import {
     Button, Form, Input, Row, message,
-    Card,
+    Card, Select,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, updateMyUser } from '../userSlice';
@@ -17,6 +17,7 @@ const validateMessages = {
 export const Profile = () => {
     const userData = useSelector(selectUser);
     const dispatch = useDispatch();
+    const agencies = useSelector((state) => state.catalog.agencies);
     const [form] = Form.useForm();
     useEffect(() => {
         if (userData.id) {
@@ -63,6 +64,7 @@ export const Profile = () => {
                         rules={[
                             {
                                 required: true,
+                                message: 'Este campo es requerido',
                             },
                         ]}
                     >
@@ -73,6 +75,26 @@ export const Profile = () => {
                         label="Apellido materno"
                     >
                         <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="agency_id"
+                        label="Agencia"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Este campo es requerido',
+                            },
+                        ]}
+                    >
+                        <Select
+                            placeholder="Selecciona una agencia"
+                        >
+                            {agencies.map((agency) => (
+                                <Select.Option key={agency.id} value={agency.id}>
+                                    {agency.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </Form.Item>
                     <Form.Item
                         name="email"

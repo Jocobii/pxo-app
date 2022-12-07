@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {
     Modal, Form, Input, message,
-    Button,
+    Button, Select,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -18,6 +18,7 @@ const UserModal = () => {
     const dispatch = useDispatch();
     const modalName = useSelector(selectModalName);
     const userList = useSelector((state) => state.user.list);
+    const agencies = useSelector((state) => state.catalog.agencies);
     const index = useSelector((state) => state.user.index);
     const user = index ? userList.find((e) => e.id === Number(index)) : null;
     const isVisible = modalName === 'USER_MODAL';
@@ -81,6 +82,21 @@ const UserModal = () => {
                     rules={requireRule}
                 >
                     <Input placeholder="Apellido paterno" />
+                </Form.Item>
+                <Form.Item
+                    name="agency_id"
+                    label="Agencia"
+                    rules={requireRule}
+                >
+                    <Select
+                        placeholder="Selecciona una agencia"
+                    >
+                        {agencies.map((agency) => (
+                            <Select.Option key={agency.id} value={agency.id}>
+                                {agency.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
                 <Form.Item name="second_last_name" label="Apellido materno">
                     <Input placeholder="Apellido materno" />

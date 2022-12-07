@@ -20,7 +20,7 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: ['react', 'jsx-a11y', 'import', 'react-hooks'],
+    plugins: ['jsx-a11y', 'import', 'react-hooks'],
     rules: {
         'react/jsx-indent': ['error', 4],
         'react/jsx-indent-props': ['error', 4],
