@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Row, Button, Col, Input, Select,
 } from 'antd';
@@ -9,11 +9,19 @@ import { getPolicies } from '../../../policySlice';
 
 const searchFields = [
     { id: 'vin', text: 'VIN' },
+    { id: 'date_issue', text: 'Fecha de la poliza' },
 ];
 
 const HeaderButtons = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [field, setField] = useState('vin');
+
+    const handleSearch = debounce((e) => dispatch(getPolicies({
+        [field]: e.target.value.trim(),
+        simple: true,
+    })), [500]);
+
     return (
         (
             <>
@@ -26,13 +34,11 @@ const HeaderButtons = () => {
                 >
                     <Input.Search
                         style={{ width: '30%' }}
-                        onChange={debounce((e) => dispatch(getPolicies({
-                            vin: e.target.value.trim(),
-                            simple: true,
-                        })), [500])}
+                        onChange={handleSearch}
                         addonBefore={(
                             <Select
                                 defaultValue="vin"
+                                onSelect={(value) => setField(value)}
                             >
                                 {searchFields.map((e) => (
                                     <Select.Option key={e.id} value={e.id}>

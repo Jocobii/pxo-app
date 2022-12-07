@@ -32,13 +32,13 @@ export const privateRoutes = [
         name: 'Clientes',
         icon: IconSwitcher('user'),
     },
-    {
-        to: '/quote/*',
-        path: 'quote',
-        Component: NotFound,
-        name: 'Cotización',
-        icon: IconSwitcher('quote'),
-    },
+    // {
+    //     to: '/quote/*',
+    //     path: 'quote',
+    //     Component: NotFound,
+    //     name: 'Cotización',
+    //     icon: IconSwitcher('quote'),
+    // },
     {
         to: '/policy/*',
         path: 'policy',
@@ -79,11 +79,11 @@ export const privateRoutes = [
             },
         ],
     },
-    {
-        to: '/reclamos/*',
-        path: 'reclamos',
-        Component: NotFound,
-        name: 'Reclamos',
-        icon: IconSwitcher('claims'),
-    },
+    // {
+    //     to: '/reclamos/*',
+    //     path: 'reclamos',
+    //     Component: NotFound,
+    //     name: 'Reclamos',
+    //     icon: IconSwitcher('claims'),
+    // },
 ];
