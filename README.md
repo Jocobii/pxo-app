@@ -1,26 +1,3 @@
-
-# PXO APP
-
-Interfaz del sistema de PXO
-
-
-![Logo](https://www.hondaoptima.com/static/dealer-20108/logo.png)
-
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/gpoptima/pxo-app
-```
-
-Go to the project directory
-
-```bash
-  cd pxo-app
-```
-
 Install dependencies
 
 ```bash
